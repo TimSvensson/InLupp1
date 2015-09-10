@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-
-
 void clear (void)
 {    
   while ( getchar() != '\n' );
@@ -17,8 +15,6 @@ char* ask_str_q (char *question)
   printf("Ditt svar: %s", reply);
   return reply;
 }
-
-
 
 typedef struct vara_s vara;
 {
