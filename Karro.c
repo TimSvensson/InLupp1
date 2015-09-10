@@ -79,7 +79,7 @@ void remove_ware(void)
 {
   char* del_ware = ask_str_q("Which ware would you like to remove?");
   // leta upp varan
-  printf("Remove %s?", del_ware)
+  printf("Remove %s?", del_ware);
     
 }
 void edit_ware(void)
