@@ -1,57 +1,70 @@
 #include <stdio.h>
-
-
-
+#include <stdbool.h>
+#include <string.h>
+typedef char *string;
+void strip (char* str)
+{
+  int len = strlen (str);
+  for (int i = 0; i<len; ++i)
+    {
+      if (str[i] == '\n')
+	{
+	  str[i] = '\0';
+	  return;
+	}
+    }
+}
 void clear (void)
-{    
-  while ( getchar() != '\n' );
+{
+  bool newline_found; 
+  do {
+    newline_found = getchar() != '\n';
+  } while (newline_found);
 }
 
 
 char* ask_str_q (char *question)
 {
-  clear();
   puts(question);
-  char *reply;
+  char reply[256];
   fgets(reply, sizeof(reply), stdin);
-  printf("Ditt svar: %s", reply);
-  return reply;
+  // clear();
+  strip (reply);
+  return strdup(reply); // anropa free någon gång i framtiden...
 }
 
-
-
-typedef struct vara_s vara;
+typedef struct vara
 {
   char name;
   char descr;
   char sto_loc;
   int price;
   int amount;
-};
+} vara_s;
 
 int ask_int_q (char *question)
 {
-  clear();
   puts(question);
   int reply;
   scanf("%d", &reply);
+  clear();
   return reply;
 }
 
 void add_ware(void)
 {
   puts("---------------------------------");
-  char ware; //  = ask_str_q ("Ware: ");
-  char description; // = ask_str_q ("Description: ");
-  char sto_loc; // = ask_str_q ("Storage location: ");
+  string ware; //  = ask_str_q ("Ware: ");
+  string description; // = ask_str_q ("Description: ");
+  string sto_loc; // = ask_str_q ("Storage location: ");
   int price; // = ask_int_q ("Price:");
   int amount; // = ask_int_q ("Amount:");
 
- *ware = ask_str_q ("Ware: ");
-  *description = ask_str_q ("Description: ");
-  *sto_loc = ask_str_q ("Storage location: ");
-  *price = ask_int_q ("Price:");
-  *amount = ask_int_q ("Amount:");
+  ware = ask_str_q ("Ware: ");
+  description = ask_str_q ("Description: ");
+  sto_loc = ask_str_q ("Storage location: ");
+  price = ask_int_q ("Price:");
+  amount = ask_int_q ("Amount:");
 
   puts("---------------------------------");
   printf("Ware: %s\n", ware);
@@ -85,6 +98,7 @@ void question_main_menu()
 {
   int answer;
   scanf("%d", &answer);
+  clear();
   switch (answer)
     {
     case 1:  add_ware(); break;
