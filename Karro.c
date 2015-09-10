@@ -28,19 +28,18 @@ char* ask_str_q (char *question)
   puts(question);
   char reply[256];
   fgets(reply, sizeof(reply), stdin);
-  // clear();
   strip (reply);
   return strdup(reply); // anropa free någon gång i framtiden...
 }
 
 typedef struct vara
 {
-  char name;
-  char descr;
-  char sto_loc;
+  char* name;
+  char* descr;
+  char* sto_loc;
   int price;
   int amount;
-} vara_s;
+} vara_t;
 
 int ask_int_q (char *question)
 {
@@ -54,11 +53,11 @@ int ask_int_q (char *question)
 void add_ware(void)
 {
   puts("---------------------------------");
-  string ware; //  = ask_str_q ("Ware: ");
-  string description; // = ask_str_q ("Description: ");
-  string sto_loc; // = ask_str_q ("Storage location: ");
-  int price; // = ask_int_q ("Price:");
-  int amount; // = ask_int_q ("Amount:");
+  string ware;
+  string description;
+  string sto_loc; 
+  int price; 
+  int amount;
 
   ware = ask_str_q ("Ware: ");
   description = ask_str_q ("Description: ");
@@ -78,7 +77,10 @@ void add_ware(void)
 
 void remove_ware(void)
 {
-  puts("hej hej");
+  char* del_ware = ask_str_q("Which ware would you like to remove?");
+  // leta upp varan
+  printf("Remove %s?", del_ware)
+    
 }
 void edit_ware(void)
 {
