@@ -33,14 +33,6 @@ char* ask_str_q (char *question)
   return strdup(reply); // anropa free någon gång i framtiden...
 }
 
-typedef struct vara
-{
-  char* name;
-  char* descr;
-  char* sto;
-  int pri;
-  int amo;
-} vara_t;
 
 int ask_int_q (char *question)
 {
@@ -51,30 +43,27 @@ int ask_int_q (char *question)
   return reply;
 }
 
-//denna funkar ej
-void ask_yn(){
+
+int ask_yn()
+{
+  clear();
   char ans;
   ans = getchar();
-  switch (ans)
+ 
+  while ((ans !='y') && (ans !='n'))
     {
-    case 'y': puts("Ware added!"); break;
-    case 'n': puts("Ware not added"); break;
-    default:
       puts ("Please answer 'y' or 'n'");
-	ask_yn()
-   
-      ; break;
-    }}
+      ans = getchar();
+      clear();
+    }
+  if (ans == 'y')
+    {
+      return 1;}
+  else
+    {
+      return 0;}
+}
 
-
-/*
-void add_test(vara_t* newware)
-  .name = "hej"
-  .descr = "jknfgoingn"
-  .sto = "A23"
-  .pri = 124324
-  .amo = 33333 */
-  
   
 void add_ware(void)
 {
@@ -91,17 +80,6 @@ void add_ware(void)
   price = ask_int_q ("Price:");
   amount = ask_int_q ("Amount:");
 
-  /* update ware
-  vara_t newware =
-    (vara_t)
-    {
-      newware.name = ware;
-      newware.descr = description;
-      newware.sto = sto_loc;
-      newware.pri = price;
-      newware.amo = amount;
-    } */
-  
   puts("---------------------------------");
   printf("Ware: %s\n", ware);
   printf("Description: %s\n", description);
@@ -110,8 +88,15 @@ void add_ware(void)
   printf("Amount: %i\n", amount);
   puts("Save this ware? y/n");
 
-  ask_yn();
-
+  if (ask_yn() == 1)
+    {
+      puts("Ware added");
+     
+	}
+  else
+    {
+      puts("Ware NOT added");
+      } 
   
 }
 
@@ -137,41 +122,45 @@ void list_all_wares(void)
   puts("hej hej");
 }
 
-void question_main_menu()
-{
-  int answer;
-  scanf("%d", &answer);
-  clear();
-  switch (answer)
-    {
-    case 1:  add_ware(); break;
-    case 2:  remove_ware(); break;
-    case 3:  edit_ware(); break;
-    case 4:  undo(); break;
-    case 5:  list_all_wares(); break;
-    case 0:  break;
-    default: puts ("defaaaaauuult");
-    }
-}
+
 void main_menu()
 {
-  puts("What would you like to do?");
-  puts("1. Add a ware");
-  puts("2. Remove a ware");
-  puts("3. Edit a ware");
-  puts("4. Undo the last action");
-  puts("5. List all wares in the database");
-  puts("0. Exit program\n");
+  
+  bool cont = true;
+  
+  while (cont)
+    {
+      puts("----- MAIN MENU ----------------------");
+      puts("What would you like to do?");
+      puts("1. Add a ware");
+      puts("2. Remove a ware");
+      puts("3. Edit a ware");
+      puts("4. Undo the last action");
+      puts("5. List all wares in the database");
+      puts("0. Exit program\n");
+
+      int answer;
+      scanf("%d", &answer);
+      clear();
+      switch (answer)
+	{
+	case 1:  add_ware(); break;
+	case 2:  remove_ware(); break;
+	case 3:  edit_ware(); break;
+	case 4:  undo(); break;
+	case 5:  list_all_wares(); break;
+	case 0:  cont = false; break;
+	default: puts ("defaaaaauuult");
+	}
+    }
+  
 }
 
 
 int main(void)
 {
   puts("\nWelcome to our warehouse program!");
-  puts("---------------------------------");
   main_menu();
-  question_main_menu();
   return 0;
-  
-  }
+}
   
