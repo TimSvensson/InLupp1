@@ -46,9 +46,9 @@ int ask_int_q (char *question)
 
 int ask_yn()
 {
-  clear();
   char ans;
   ans = getchar();
+  clear();
  
   while ((ans !='y') && (ans !='n'))
     {
@@ -122,15 +122,30 @@ void list_all_wares(void)
   puts("hej hej");
 }
 
+int exit_warehouse()
+{
+  char ans;
+  puts("Are you sure you would like to exit the warehouse? y/n");
+  ans = ask_yn();
+
+  if (ans == 1) 
+    {
+      return 0; //exit
+    }
+  else
+    {
+      return 1; //stay in program
+    }
+}
 
 void main_menu()
-{
-  
+{ 
   bool cont = true;
   
   while (cont)
     {
-      puts("----- MAIN MENU ----------------------");
+      puts("\n----- MAIN MENU ----------------------");
+      puts("--------------------------------------");
       puts("What would you like to do?");
       puts("1. Add a ware");
       puts("2. Remove a ware");
@@ -149,7 +164,16 @@ void main_menu()
 	case 3:  edit_ware(); break;
 	case 4:  undo(); break;
 	case 5:  list_all_wares(); break;
-	case 0:  cont = false; break;
+	case 0:
+	  if (exit_warehouse() == 0)
+	    {
+	      cont = false;
+	    }
+	  else
+	    {
+	      cont = true;
+	    }
+	  break;
 	default: puts ("defaaaaauuult");
 	}
     }
