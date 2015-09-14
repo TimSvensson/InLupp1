@@ -28,4 +28,4 @@ void remove_item(char *name);
 void edit_item();
 void print_warehouse();
 void undo_action();
-void exit_warehouse();
+int exit_warehouse();

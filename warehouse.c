@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include "warehouse.h"
 
 void strip (char* str)
 {
@@ -70,9 +70,9 @@ void add_item_aux(void)
   puts("---------------------------------");
   char* name;
   char* description;
-  char* sto_loc; 
+  char* ware_loc; 
   int price; 
-  int amount;
+  int quantity;
   
   name = ask_str_q ("Name: ");
   description = ask_str_q ("Description: ");
@@ -188,4 +188,3 @@ int main(void)
   main_menu();
   return 0;
 }
-  
