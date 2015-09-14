@@ -162,7 +162,7 @@ void main_menu()
 	{
 	case 1:  add_item_aux(); break;
 	case 2:  remove_ware(); break;
-	case 3:  edit_ware(); break;
+	case 3:  edit_item (); break;
 	case 4:  undo(); break;
 	case 5:  list_all_wares(); break;
 	case 0:
