@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 typedef struct warehouse_header warehouse_header_t;
 typedef struct warehouse warehouse_t;
