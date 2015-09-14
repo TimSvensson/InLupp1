@@ -81,7 +81,7 @@ void add_item_aux(void)
   quantity = ask_int_q ("Quantity:");
 
   puts("---------------------------------");
-  printf("Ware: %s\n", ware);
+  printf("Ware: %s\n", name);
   printf("Description: %s\n", description);
   printf("Storage Location: %s\n", ware_loc);
   printf("Price: %i\n", price);

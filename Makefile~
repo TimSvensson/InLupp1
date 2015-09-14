@@ -1,0 +1,2 @@
+warehouse: warehouse.c
+	gcc -Wall -std=c11 -ggdb warehouse.c -o warehouse
