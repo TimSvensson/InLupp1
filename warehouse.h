@@ -3,4 +3,4 @@
 #include <string.h>
 
 void undo_action();
-void exit_warehouse();
+int exit_warehouse();

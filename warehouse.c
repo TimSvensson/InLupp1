@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include "warehouse.h"
 
 void strip (char* str)
 {
@@ -70,9 +70,9 @@ void add_item_aux(void)
   puts("---------------------------------");
   char* name;
   char* description;
-  char* sto_loc; 
+  char* ware_loc; 
   int price; 
-  int amount;
+  int quantity;
   
   name = ask_str_q ("Name: ");
   description = ask_str_q ("Description: ");
@@ -81,7 +81,7 @@ void add_item_aux(void)
   quantity = ask_int_q ("Quantity:");
 
   puts("---------------------------------");
-  printf("Ware: %s\n", ware);
+  printf("Ware: %s\n", name);
   printf("Description: %s\n", description);
   printf("Storage Location: %s\n", ware_loc);
   printf("Price: %i\n", price);
@@ -162,7 +162,7 @@ void main_menu()
 	{
 	case 1:  add_item_aux(); break;
 	case 2:  remove_ware(); break;
-	case 3:  edit_ware(); break;
+	case 3:  edit_item (); break;
 	case 4:  undo(); break;
 	case 5:  list_all_wares(); break;
 	case 0:
@@ -188,4 +188,3 @@ int main(void)
   main_menu();
   return 0;
 }
-  
