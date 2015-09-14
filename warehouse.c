@@ -65,31 +65,32 @@ int ask_yn()
 }
 
   
-void add_ware(void)
+void add_item_aux(void)
 {
   puts("---------------------------------");
-  char* ware;
+  char* name;
   char* description;
   char* sto_loc; 
   int price; 
   int amount;
   
-  ware = ask_str_q ("Ware: ");
+  name = ask_str_q ("Name: ");
   description = ask_str_q ("Description: ");
-  sto_loc = ask_str_q ("Storage location: ");
+  ware_loc = ask_str_q ("Warehouse location: ");
   price = ask_int_q ("Price:");
-  amount = ask_int_q ("Amount:");
+  quantity = ask_int_q ("Quantity:");
 
   puts("---------------------------------");
   printf("Ware: %s\n", ware);
   printf("Description: %s\n", description);
-  printf("Storage Location: %s\n", sto_loc);
+  printf("Storage Location: %s\n", ware_loc);
   printf("Price: %i\n", price);
-  printf("Amount: %i\n", amount);
+  printf("Amount: %i\n", quantity);
   puts("Save this ware? y/n");
 
   if (ask_yn() == 1)
     {
+      add_item(name, description, ware_loc, price, quantity);
       puts("Ware added");
      
 	}
@@ -159,7 +160,7 @@ void main_menu()
       clear();
       switch (answer)
 	{
-	case 1:  add_ware(); break;
+	case 1:  add_item_aux(); break;
 	case 2:  remove_ware(); break;
 	case 3:  edit_ware(); break;
 	case 4:  undo(); break;
