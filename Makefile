@@ -10,6 +10,7 @@ backend.o: backend.c
 
 run: warehouse #run är beroende av warehouse
 	@echo "Running program, woho!"
+
 	@./warehouse #om man inte vill att terminalen skriver ut ./warehouse kan man lägga till @ innan
 
 clean:
