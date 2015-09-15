@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 #include "warehouse.h"
+#include "backend.h"
+
 
 void strip (char* str)
 {
@@ -37,10 +41,21 @@ char* ask_str_q (char *question)
 int ask_int_q (char *question)
 {
   puts(question);
-  int reply;
-  scanf("%d", &reply);
+  char reply;
+  reply = getchar();
+  int ok_ans;
+  ok_ans = isdigit(reply);
   clear();
-  return reply;
+  reply = atoi(&reply);
+  while (ok_ans == 0)
+    {
+      puts("Write a number please");
+      reply = getchar();
+      ok_ans = isdigit(reply);
+      clear();
+      reply = atoi(&reply);
+    }
+ return reply;
 }
 
 
@@ -76,40 +91,48 @@ void add_item_aux(void)
   
   name = ask_str_q ("Name: ");
   description = ask_str_q ("Description: ");
-  ware_loc = ask_str_q ("Warehouse location: ");
   price = ask_int_q ("Price:");
+  ware_loc = ask_str_q ("Warehouse location: ");
   quantity = ask_int_q ("Quantity:");
 
   puts("---------------------------------");
   printf("Ware: %s\n", name);
   printf("Description: %s\n", description);
-  printf("Storage Location: %s\n", ware_loc);
   printf("Price: %i\n", price);
+  printf("Storage Location: %s\n", ware_loc);
   printf("Amount: %i\n", quantity);
   puts("Save this ware? y/n");
 
   if (ask_yn() == 1)
     {
-      add_item(name, description, ware_loc, price, quantity);
-      puts("Ware added");
+      //add_item(name, description, price, ware_loc, quantity);
+      puts("Item added");
      
-	}
+    }
   else
     {
-      puts("Ware NOT added");
+      puts("Item NOT added");
       } 
   
 }
 
 
-void remove_ware(void)
+void remove_item_aux(void)
 {
-  char* del_ware = ask_str_q("Which ware would you like to remove?");
-  // leta upp varan
-  printf("Remove %s?", del_ware);
-    
+  char* del_item = ask_str_q("Which ware would you like to remove?");
+  printf("Remove %s? y/n \n", del_item);
+  if (ask_yn() == 1)
+    {
+      puts("Item removed!");
+      //remove_item (del_item);
+    }
+  else
+    {
+      puts("Item is still in warehouse");
+    }    
 }
-void edit_ware(void)
+
+void edit_item(void)
 {
   puts("hej hej");
 }
@@ -118,7 +141,7 @@ void undo(void)
   puts("hej hej");
 }
   
-void list_all_wares(void)
+void list_all_items(void)
 {
   puts("hej hej");
 }
@@ -153,18 +176,17 @@ void main_menu()
       puts("3. Edit a ware");
       puts("4. Undo the last action");
       puts("5. List all wares in the database");
-      puts("0. Exit program\n");
+      puts("0. Exit program");
 
       int answer;
-      scanf("%d", &answer);
-      clear();
+      answer = ask_int_q("");
       switch (answer)
 	{
 	case 1:  add_item_aux(); break;
-	case 2:  remove_ware(); break;
-	case 3:  edit_item (); break;
-	case 4:  undo(); break;
-	case 5:  list_all_wares(); break;
+	case 2:  remove_item_aux(); break;
+	case 3:  puts("edit_item anropas")/*edit_item ()*/; break;
+	case 4:  puts("undo_action anropas") /*undo_action()*/; break;
+	case 5: puts("print_warehouse anropas")/* print_warehouse()*/; break;
 	case 0:
 	  if (exit_warehouse() == 0)
 	    {
