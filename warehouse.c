@@ -132,10 +132,8 @@ void add_item_aux(void)
 
 
   
-void remove_item_aux(void)
+void remove_item_aux(void) //den här funktionen är sjukt oklar
 {
-  int del_item = ask_int_q("Which ware would you like to remove?");
-  
   if (ask_yn("Remove this ware? y/n") == 1)
     {
       puts("Item removed!");
@@ -152,7 +150,8 @@ void edit_item_aux()
   warehouse_t* item = edit_item();
   int cont = 1;
   while (cont == 1)
-    { print_item_numbers(item);
+    {
+      print_item_numbers(item);
       int edit;
       edit =  ask_int_q("What would you like to edit?");
   
@@ -166,7 +165,7 @@ void edit_item_aux()
 	} break;
 	case 2: {item -> item_t.description = ask_str_q("Description: ");} break;
 	case 3: {item -> item_t.price = ask_int_q("Price");} break;
-	case 4: {item -> ware_loc 0 ask_str_q("Warehouse Location: ");} break;
+	case 4: {item -> ware_loc = ask_str_q("Warehouse Location: ");} break;
 	case 5: {item -> quantity = ask_int_q("Quantity: ");} break;
 	default: puts("defaaaauultttt");
 	}
