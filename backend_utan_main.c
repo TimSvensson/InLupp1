@@ -1,6 +1,10 @@
 #include "backend.h"
 
+
+
 //-----
+
+
 
 // the header of the list
 struct warehouse_header
@@ -24,13 +28,15 @@ struct warehouse
   
 };
 
+
+
 //-----
+
+
 
 // global declaration of the header list
 struct warehouse_header *warehouse_list =
   (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
-
-init_list_head();
 
 // set up the list pointers
 void init_list_head()
@@ -91,7 +97,11 @@ void add_item(char *name, char *description, int price,
   warehouse_list -> ptr_end = new_item;
 }
 
+
+
 //-----
+
+
 
 void remove_item(char *name)
 {
@@ -173,6 +183,8 @@ void edit_item()
 
 //-----
 
+
+
 // Prints an item
 void print_item(struct warehouse *item)
 {
@@ -216,7 +228,11 @@ void print_warehouse() {
   }
 }
 
+
+
 //-----
+
+
 
 // free up memory
 void destroy_item(struct warehouse *item)
@@ -248,11 +264,13 @@ void destroy_warehouse()
 	  // set all pointers to NULL
 	  warehouse_list -> ptr_top = NULL;
 	  warehouse_list -> ptr_end = NULL;
-	  // free up memory taken på list header
+	  // free up memory taken by list header
 	  free(warehouse_list);
 	  break; // exit loop
 	}
     }
 }
+
+
 
 //-----

@@ -1,56 +1,68 @@
 #include "backend.h"
 
-//-----
 
-struct warehouse_header
-{
-  warehouse_t *ptr_top;
-  warehouse_t *ptr_end;
-};
-
-struct warehouse
-{
-  struct item
-  {
-    char *name;
-    char *description;
-    int price;
-  }item_t;
-
-  char *ware_loc;
-  int quantity;
-  struct warehouse *ptr_next_item;
-  
-};
 
 //-----
+
+
 
 struct warehouse_header *warehouse_list =
   (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
 
 void init_list_head()
 {
-
   assert(warehouse_list != NULL);
 
   warehouse_list -> ptr_top = NULL;
-  warehouse_list -> ptr_end = NULL;
-
 }
-
-void destroy_item(struct warehouse *item);
- 
-//-----
 
 int warehouse_empty()
 {
   return warehouse_list -> ptr_top == NULL;
 }
 
+void print_empty()
+{
+  printf("------------------\n");
+  printf("WAREHOUSE IS EMPTY\n");
+  printf("------------------\n\n");
+}
+
+void print_end_of_list()
+{
+  printf("-----------\n");
+  printf("END OF LIST\n");
+  printf("-----------\n\n");
+}
+
+warehouse_t * find_item(int i);
+warehouse_t * print_20(warehouse_t *item);
+void print_item(warehouse_t *item);
+void print_item_name(warehouse_t *item, int i);
+void destroy_item(warehouse_t *item);
+
+
+
+//===============
+//----- ADD -----
+//===============
+
+
+
 void append_to_tail(struct warehouse *new_item)
 {
-  struct warehouse *prev_item = warehouse_list -> ptr_end;
-  prev_item -> ptr_next_item = new_item;
+  warehouse_t *crnt_item = warehouse_list -> ptr_top;
+  
+  while(1)
+    {
+      if(crnt_item -> ptr_next_item == NULL)
+	{
+	  crnt_item -> ptr_next_item = new_item;
+	  break;
+	}
+
+      crnt_item = crnt_item -> ptr_next_item;
+    }
 }
 
 void add_item(char *name, char *description, int price,
@@ -70,67 +82,126 @@ void add_item(char *name, char *description, int price,
     {
       append_to_tail(new_item);
       
-    } else
+    }
+  else
     {
       warehouse_list -> ptr_top = new_item;
     }
-
-  warehouse_list -> ptr_end = new_item;
 }
 
-//-----
 
-void remove_item(char *name)
+//==================
+//----- REMOVE -----
+//==================
+
+
+//TODO
+void remove_item(int i);
+
+
+
+//================
+//----- EDIT -----
+//================
+
+
+
+//TODO: implement edit_item
+warehouse_t * edit_item()
 {
-  //find_item
-  struct warehouse *crnt_item = warehouse_list -> ptr_top;
-  struct warehouse *prev_item = NULL;
+  warehouse_t * ret_item = NULL; //return value
+  
+  //print items
+  warehouse_t * crnt_item = warehouse_header -> ptr_top;
 
+  if(warehouse_empty())
+    {
+      return NULL;
+    }
+  
   while(1)
     {
-      // find the item
-      if(strcmp(crnt_item -> item_t.name, name) == 0)
+      print_20(crnt_item);
+      printf("\n");
+
+      // choose item
+    }
+
+  return ret_item;
+}
+
+
+//=================
+//----- PRINT -----
+//=================
+
+
+int get_y()
+{
+  printf("Print next 20? (y/n) \n> ");
+  char ans;
+  scanf(" %c", &ans);
+  printf("\n");
+
+  if(ans == 'y')
+    {
+      return 1;
+    }
+
+  return 0;
+}
+
+// print items in intervals of 20
+void print_warehouse()
+{
+  if(warehouse_empty())
+    {
+      print_empty();
+    }
+  else
+    {
+      warehouse_t *item = warehouse_list -> ptr_top;
+
+      while(1)
 	{
-	  if(prev_item == NULL) // if crnt_item is the top of the list
+	  item = print_20(item);
+	  printf("\n");
+
+	  //if item == NULL: end of list, break loop
+	  if(item == NULL)
 	    {
-	      warehouse_list -> ptr_top = crnt_item -> ptr_next_item;
-	    }
-	  if(crnt_item -> ptr_next_item == NULL) // crnt_item is the last item in list
-	    {
-	      warehouse_list -> ptr_end = crnt_item -> ptr_next_item;
-	      if(prev_item != NULL)
-		{
-		  prev_item -> ptr_next_item = NULL;
-		}
-	    }
-	  if(prev_item != NULL && crnt_item -> ptr_next_item != NULL)
-	    {
-	      prev_item -> ptr_next_item = crnt_item -> ptr_next_item;
-	    }
+	      print_end_of_list();
+	      break;
+	    }	  	 
 	  
-	  destroy_item(crnt_item);
-	  printf("\n----------\nITEM FOUND AND DESTROYED\n----------\n");
-	  break;
+	  if(!get_y())
+	    {
+	      break;
+	    }
 	}
-      else if(crnt_item -> ptr_next_item != NULL)
-	{
-	  prev_item = crnt_item;
-	  crnt_item = crnt_item -> ptr_next_item;
-	}
-      else
-	{
-	  printf("\n----------\nITEM NOT FOUND\n----------\n");
-	  break;
-	} 
     }
 }
 
-//-----
+warehouse_t * print_20(warehouse_t *item)
+{
+  
+  for(int i = 1; i <= 20; ++i, item = item -> ptr_next_item)
+    {
+      print_item_name(item, i);
+      
+      if(item -> ptr_next_item == NULL)
+	{
+	  return NULL;
+	}
+    }
 
-//TODO: implement edit_item
-void edit_item();
+  return item;
+}
 
-//-----
+void print_item_name(warehouse_t *item, int i)
+{
+  printf("%d\t%s\n", i, item -> item_t.name);
+}
 
 void print_item(struct warehouse *item)
 {
@@ -138,40 +209,31 @@ void print_item(struct warehouse *item)
 
   //TODO: Make output prettier
   printf("\n----------\n");
-  printf("Name\n\t%s\n", item -> item_t.name);
-  printf("Description\n\t%s\n", item -> item_t.description);
-  printf("Price\n\t%d\n", item -> item_t.price);
-  printf("Location\n\t%s\n", item -> ware_loc);
-  printf("Quantity\n\t%d\n", item -> quantity);
+  printf("Name\t\t%s\n", item -> item_t.name);
+  printf("Description\t%s\n", item -> item_t.description);
+  printf("Price\t\t%d\n", item -> item_t.price);
+  printf("Location\t%s\n", item -> ware_loc);
+  printf("Quantity\t%d\n", item -> quantity);
 }
 
-void print_warehouse()
+void print_item_numbers(struct warehouse *item)
 {
-  if(!warehouse_empty())
-    {
-      struct warehouse *crnt_item = warehouse_list -> ptr_top;
+  assert(item != NULL);
 
-      while(1)
-	{
-	  assert(crnt_item != NULL);
-
-	  print_item(crnt_item);
-
-	  if(crnt_item -> ptr_next_item == NULL)
-	    {
-	      break;
-	    }
-
-	  crnt_item = crnt_item -> ptr_next_item;
-	}
-    }
-  else
-    {
-      printf("\n----------\nWAREHOUSE IS EMPTY\n----------\n");
-    }
+  //TODO: Make output prettier
+  printf("1. Name\t\t%s\n", item -> item_t.name);
+  printf("2. Description\t%s\n", item -> item_t.description);
+  printf("3. Price\t\t%d\n", item -> item_t.price);
+  printf("4. Location\t%s\n", item -> ware_loc);
+  printf("5. Quantity\t%d\n", item -> quantity);
 }
 
-//---
+
+//===================
+//----- DESTROY -----
+//===================
+
+
 
 void destroy_item(struct warehouse *item)
 {
@@ -198,39 +260,8 @@ void destroy_warehouse()
       if(crnt_item -> ptr_next_item == NULL)
 	{
 	  warehouse_list -> ptr_top = NULL;
-	  warehouse_list -> ptr_end = NULL;
 	  free(warehouse_list);
 	  break;
 	}
     }
-}
-
-//-----
-
-//TODO: Make an actual test-file.
-int main(int argc, char* argv[])
-{
-
-  init_list_head(); //TODO: Try to get rid of this function.
-
-  add_item("t1", "A", 1, "A11", 11);
-  add_item("t2", "B", 2, "B22", 22);
-  add_item("t3", "C", 3, "C33", 33);
-  add_item("t4", "D", 4, "D44", 44);
-  add_item("t5", "E", 5, "E55", 55);
-
-  print_warehouse();
-
-  remove_item("t3");
-  remove_item("t5");
-  remove_item("t1");
-
-  print_warehouse();
-  
-  destroy_warehouse();
-
-  //TODO: make sure that printing warehouse without a warehouse doesn't crash the program.
-  // print_warehouse();
-  
-  return 0;
 }
