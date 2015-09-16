@@ -1,13 +1,12 @@
 #include "backend.h"
-
+#include "warehouse.h"
 
 
 //-----
 
 
 
-struct warehouse_header *warehouse_list =
-  (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
+
 
 void init_list_head()
 {

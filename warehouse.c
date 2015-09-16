@@ -4,7 +4,10 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "backend.h"
+#include "warehouse.h"
 
+struct warehouse_header *warehouse_list =
+  (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
 
 char* strip (char* str)
 {
@@ -162,8 +165,8 @@ void edit_item_aux()
 	  item -> item_t.name = ask_str_q("Name: ");
 	} break;
 	case 2: {item -> item_t.description = ask_str_q("Description: ");} break;
-	case 3: {item -> price = ask_int_q("Price");} break;
-	case 4: {item -> item_t.ware_loc 0 ask_str_q("Warehouse Location: ");} break;
+	case 3: {item -> item_t.price = ask_int_q("Price");} break;
+	case 4: {item -> ware_loc 0 ask_str_q("Warehouse Location: ");} break;
 	case 5: {item -> quantity = ask_int_q("Quantity: ");} break;
 	default: puts("defaaaauultttt");
 	}
