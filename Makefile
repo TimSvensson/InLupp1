@@ -2,14 +2,15 @@ CC=gcc
 
 all: warehouse
 
-warehouse: warehouse.c backend.o
-	$(CC) -Wall -std=c11 -ggdb warehouse.c backend.o -o warehouse
+warehouse: warehouse.c backend_utan_main.o
+	$(CC) -Wall -std=c11 -ggdb warehouse.c backend_utan_main.o -o warehouse
 
-backend.o: backend.c
-	$(CC) -Wall -std=c11 -ggdb backend.c -c
+backend_utan_main.o: backend_utan_main.c
+	$(CC) -Wall -std=c11 -ggdb backend_utan_main.c -c
 
 run: warehouse #run är beroende av warehouse
 	@echo "Running program, woho!"
+
 	@./warehouse #om man inte vill att terminalen skriver ut ./warehouse kan man lägga till @ innan
 
 clean:
