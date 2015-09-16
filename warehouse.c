@@ -42,20 +42,31 @@ int ask_int_q (char *question)
 {
   puts(question);
   char reply;
-  reply = getchar();
   int ok_ans;
-  ok_ans = isdigit(reply);
-  clear();
-  reply = atoi(&reply);
-  while (ok_ans == 0)
-    {
-      puts("Write a number please");
-      reply = getchar();
+
+  while
+    { reply = getchar();
       ok_ans = isdigit(reply);
       clear();
       reply = atoi(&reply);
+      if (ok_ans == 0)
+	{
+	  puts("Write a number please");
+	}
+      else
+	{
+	  break;
+	}
     }
- return reply;
+  /* while (ok_ans == 0)
+     {
+     puts("Write a number please");
+     reply = getchar();
+     ok_ans = isdigit(reply);
+     clear();
+     reply = atoi(&reply);
+     } */
+  return reply;
 }
 
 
@@ -180,6 +191,11 @@ void main_menu()
 
       int answer;
       answer = ask_int_q("");
+      while (answer > 5 || answer < 0)
+	{
+	  puts ("That's not an option. Please try again with a number between 0-5.");
+	  answer = ask_int_q("");
+	}
       switch (answer)
 	{
 	case 1:  add_item_aux(); break;
@@ -197,7 +213,8 @@ void main_menu()
 	      cont = true;
 	    }
 	  break;
-	default: puts ("defaaaaauuult");
+	default: puts ("defaaaaauuuuuult");
+	    
 	}
     }
   
