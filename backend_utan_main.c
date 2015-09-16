@@ -254,20 +254,3 @@ void destroy_warehouse()
 }
 
 //-----
-
-void test()
-{
-  add_item("t1", "A", 1, "A11", 11);
-  add_item("t2", "B", 2, "B22", 22);
-  add_item("t3", "C", 3, "C33", 33);
-  add_item("t4", "D", 4, "D44", 44);
-  add_item("t5", "E", 5, "E55", 55);
-
-  print_warehouse();
-
-  remove_item("t3");
-  remove_item("t5");
-  remove_item("t1");
-
-  print_warehouse();
-}
