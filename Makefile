@@ -2,11 +2,11 @@ CC=gcc
 
 all: warehouse
 
-warehouse: warehouse.c backend_utan_main.o
-	$(CC) -Wall -std=c11 -ggdb warehouse.c backend_utan_main.o -o warehouse
+warehouse: warehouse.c backend.o
+	$(CC) -Wall -std=c11 -ggdb warehouse.c backend.o -o warehouse
 
-backend_utan_main.o: backend_utan_main.c
-	$(CC) -Wall -std=c11 -ggdb backend_utan_main.c -c
+backend.o: backend.c
+	$(CC) -Wall -std=c11 -ggdb backend.c -c
 
 run: warehouse #run är beroende av warehouse
 	@echo "Running program, woho!"
