@@ -44,8 +44,9 @@ int ask_int_q (char *question)
   char reply;
   int ok_ans;
 
-  while
-    { reply = getchar();
+  while (1)
+    {
+      reply = getchar();
       ok_ans = isdigit(reply);
       clear();
       reply = atoi(&reply);
@@ -58,6 +59,10 @@ int ask_int_q (char *question)
 	  break;
 	}
     }
+
+  return reply;
+}
+
   /* while (ok_ans == 0)
      {
      puts("Write a number please");
@@ -66,8 +71,6 @@ int ask_int_q (char *question)
      clear();
      reply = atoi(&reply);
      } */
-  return reply;
-}
 
 
 int ask_yn()
@@ -190,7 +193,7 @@ void print_main_menu()
 void main_menu()
 { 
   bool cont = true;
-  
+  print_main_menu();
   while (cont)
     {
       int answer;
