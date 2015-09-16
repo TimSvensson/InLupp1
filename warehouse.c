@@ -91,7 +91,7 @@ void print_add_item(char* name, char* description, int price, char* ware_loc, in
   printf("Ware: %s\n", name);
   printf("Description: %s\n", description);
   printf("Price: %i\n", price);
-  printf("Storage Location: %s\n", ware_loc);
+  printf("Warehouse Location: %s\n", ware_loc);
   printf("Amount: %i\n", quantity);
 }
 
@@ -144,26 +144,33 @@ void remove_item_aux(void)
     }    
 }
 
-void edit_item_aux(warehouse_t* item)
+void edit_item_aux()
 {
+  warehouse_t* item = edit_item();
+  int cont = 1;
+  while (cont == 1)
+    { print_item_numbers(item);
+      int edit;
+      edit =  ask_int_q("What would you like to edit?");
   
-  print_item_numbers(item);
-  int edit;
-  edit =  ask_int_q("Which item would you like to edit?");
-  
-  while (edit < 1 || edit > 5)
-    {edit = ask_int_q("That's not an option. Please try again with a number between 1-5");
+      while (edit < 1 || edit > 5)
+	{edit = ask_int_q("That's not an option. Please try again with a number between 1-5");
+	}
+      switch (edit)
+	{
+	case 1: {
+	  item -> item_t.name = ask_str_q("Name: ");
+	} break;
+	case 2: {item -> item_t.description = ask_str_q("Description: ");} break;
+	case 3: {item -> price = ask_int_q("Price");} break;
+	case 4: {item -> item_t.ware_loc 0 ask_str_q("Warehouse Location: ");} break;
+	case 5: {item -> quantity = ask_int_q("Quantity: ");} break;
+	default: puts("defaaaauultttt");
+	}
+      cont = ask_yn("Continue edit this item? y/n ");
     }
-  switch (edit)
-    {
-    case 1: break;
-    case 2: break;
-    case 3: break;
-    case 4: break;
-    case 5: break;
-    default: puts("defaaaauultttt");
-    }
-  
+  puts("Item successfully updated");
+  // ask_yn("Edit another item? y/n ");
 }
 void undo(void)
 {
