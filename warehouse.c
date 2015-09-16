@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "warehouse.h"
 #include "backend.h"
 
 
@@ -44,8 +43,9 @@ int ask_int_q (char *question)
   char reply;
   int ok_ans;
 
-  while
-    { reply = getchar();
+  while (1)
+    {
+      reply = getchar();
       ok_ans = isdigit(reply);
       clear();
       reply = atoi(&reply);
@@ -58,16 +58,18 @@ int ask_int_q (char *question)
 	  break;
 	}
     }
-  /* while (ok_ans == 0)
-     {
-     puts("Write a number please");
-     reply = getchar();
-     ok_ans = isdigit(reply);
-     clear();
-     reply = atoi(&reply);
-     } */
+
   return reply;
 }
+
+/* while (ok_ans == 0)
+   {
+   puts("Write a number please");
+   reply = getchar();
+   ok_ans = isdigit(reply);
+   clear();
+   reply = atoi(&reply);
+   } */
 
 
 int ask_yn()
@@ -173,28 +175,31 @@ int exit_warehouse()
     }
 }
 
+void print_main_menu()
+{
+  puts("\n----- MAIN MENU ----------------------");
+  puts("--------------------------------------");
+  puts("What would you like to do?");
+  puts("1. Add a ware");
+  puts("2. Remove a ware");
+  puts("3. Edit a ware");
+  puts("4. Undo the last action");
+  puts("5. List all wares in the database");
+  puts("0. Exit program");
+
+}
+
 void main_menu()
 { 
   bool cont = true;
-  
+  print_main_menu();
   while (cont)
     {
-      puts("\n----- MAIN MENU ----------------------");
-      puts("--------------------------------------");
-      puts("What would you like to do?");
-      puts("1. Add a ware");
-      puts("2. Remove a ware");
-      puts("3. Edit a ware");
-      puts("4. Undo the last action");
-      puts("5. List all wares in the database");
-      puts("0. Exit program");
-
       int answer;
       answer = ask_int_q("");
       while (answer > 5 || answer < 0)
 	{
-	  puts ("That's not an option. Please try again with a number between 0-5.");
-	  answer = ask_int_q("");
+	  answer = ask_int_q("That's not an option. Please try again with a number between 0-5.");
 	}
       switch (answer)
 	{
@@ -202,7 +207,7 @@ void main_menu()
 	case 2:  remove_item_aux(); break;
 	case 3:  puts("edit_item anropas")/*edit_item ()*/; break;
 	case 4:  puts("undo_action anropas") /*undo_action()*/; break;
-	case 5: puts("print_warehouse anropas")/* print_warehouse()*/; break;
+	case 5:  puts("print_warehouse anropas")/* print_warehouse()*/; break;
 	case 0:
 	  if (exit_warehouse() == 0)
 	    {
@@ -213,11 +218,9 @@ void main_menu()
 	      cont = true;
 	    }
 	  break;
-	default: puts ("defaaaaauuuuuult");
-	    
+	default: puts ("defaaaaauuuuuult");	    
 	}
-    }
-  
+    } 
 }
 
 
