@@ -35,7 +35,7 @@ void add_item(char *name, char *description, int price,
 // removes an item, based on index in list.
 void remove_item(int i);
 // edit item, selected by index
-void edit_item(int i);
+warehouse_t * edit_item(int i);
 // print item, base on index
 void print_item(int i);
 // displays the entire warehouse

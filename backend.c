@@ -35,6 +35,21 @@ void print_end_of_list()
   printf("-----------\n\n");
 }
 
+int get_y()
+{
+  printf("Print next 20? (y/n) \n> ");
+  char ans;
+  scanf(" %c", &ans);
+  printf("\n");
+
+  if(ans == 'y')
+    {
+      return 1;
+    }
+
+  return 0;
+}
+
 warehouse_t * find_item(int i);
 warehouse_t * print_20(warehouse_t *item);
 void print_item(warehouse_t *item);
@@ -106,28 +121,70 @@ void remove_item(int i);
 
 
 
-//TODO: implement edit_item
+int choose_item()
+{
+  printf("Choose an item or press 0");
+  int ans;
+  scanf("%d", &ans);
+  return ans;
+}
+
+warehouse_t * get_address(warehouse_t * item, int end)
+{
+  for(int i = 1; i <= end; ++i, item = item -> ptr_next_item)
+    {
+      if(i == end)
+	return item;
+    }
+
+  return NULL;
+}
+
+//TODO
 warehouse_t * edit_item()
 {
-  warehouse_t * ret_item = NULL; //return value
-  
-  //print items
-  warehouse_t * crnt_item = warehouse_header -> ptr_top;
-
   if(warehouse_empty())
     {
+      print_empty();
       return NULL;
     }
   
+  //print items
+  warehouse_t * crnt_item = NULL;
+  warehouse_t * next_item = warehouse_list -> ptr_top;
+  
   while(1)
     {
-      print_20(crnt_item);
+      crnt_item = next_item;
+      
+      next_item = print_20(crnt_item);
       printf("\n");
 
-      // choose item
+      int ans = choose_item();
+
+      if(ans == 0)
+	{
+	  // ask: exit or next 20
+	  printf("Show next list of items?\n> ");
+	  if(!get_y())
+	    {
+	      return NULL;
+	    }
+	}
+      else if(ans > 0 && ans <= 20)
+	{
+	  // return: address of chosen item
+	  return get_address(crnt_item, ans);
+	}
+      else
+	{
+	  // incorrect input
+	  printf("Incorect input, try again!\n");
+	  next_item = crnt_item;
+	}
     }
 
-  return ret_item;
+  return NULL;
 }
 
 
@@ -135,21 +192,6 @@ warehouse_t * edit_item()
 //----- PRINT -----
 //=================
 
-
-int get_y()
-{
-  printf("Print next 20? (y/n) \n> ");
-  char ans;
-  scanf(" %c", &ans);
-  printf("\n");
-
-  if(ans == 'y')
-    {
-      return 1;
-    }
-
-  return 0;
-}
 
 // print items in intervals of 20
 void print_warehouse()
