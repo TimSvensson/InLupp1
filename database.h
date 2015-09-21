@@ -3,9 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+enum enum_action
+  {
+    ADD_ACTION,
+    REMOVE_ACTION,
+    EDIT_ACTION,
+    NO_ACTION
+  };
+
+
 typedef struct warehouse warehouse;
 typedef struct shelf shelf;
-typedef struct item item;
+typedef struct prev_state prev_state;
+typedef enum enum_action enum_action;
+
 
 // Creates a new warehouse
 warehouse * new_warehouse();
@@ -29,3 +41,11 @@ void undo_action(warehouse *warehouse_list);
 
 // free up memory used by program
 void destroy_warehouse(warehouse *warehouse_list);
+
+
+
+char * get_name(shelf *shelf);
+char * get_description(shelf *shelf);
+int get_price(shelf *shelf);
+char * get_shelf_num(shelf *shelf);
+int get_num_items(shelf *shelf);

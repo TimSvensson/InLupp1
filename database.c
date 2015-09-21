@@ -1,8 +1,5 @@
 #include "database.h"
 
-typedef struct prev_state prev_state;
-typedef enum enum_action enum_action;
-
 
 // ==================
 // ----- STRUCT -----
@@ -16,20 +13,19 @@ struct warehouse
   shelf *first_shelf;
 };
 
-struct item
-{
-  char *name;
-  char *description;
-  int price;
-};
 
 // shelf, items are stored here
 struct shelf
 {
-  item item;
+  struct item
+  {
+    char *name;
+    char *description;
+    int price;
+  } item;
 
   char *shelf_num;
-  int num_shelfs;
+  int num_items;
   
   shelf *next_shelf;
 };
@@ -37,20 +33,9 @@ struct shelf
 struct prev_state
 {
   enum_action prev_action;
-  shelf_t prev_warehouse;
+  shelf prev_warehouse;
   int index;
 };
-
-// ----- ENUM -----
-
-typedef enum
-  {
-    ADD_ACTION,
-    REMOVE_ACTION,
-    EDIT_ACTION,
-    NO_ACTION
-  } enum_action;
-
 
 
 // ===============
@@ -62,7 +47,7 @@ typedef enum
 // Get the last element of warehouse_list
 shelf * get_last_shelf(warehouse *warehouse_list)
 {
-  shelf = warehouse_list -> first_shelf;
+  shelf *shelf = warehouse_list -> first_shelf;
   if(shelf == NULL)
     {
       return NULL;
@@ -79,6 +64,8 @@ shelf * get_last_shelf(warehouse *warehouse_list)
 	  shelf = shelf -> next_shelf;
 	}
     }
+
+  return NULL;
 }
 
 // Get shelf at index in warehouse_list
@@ -92,6 +79,31 @@ shelf * get_shelf(warehouse *warehouse_list, int index)
     }
 
   return shelf;
+}
+
+char * get_name(shelf *shelf)
+{
+  return (shelf -> item.name);
+}
+
+char * get_description(shelf *shelf)
+{
+  return shelf -> item.description;
+}
+
+int get_price(shelf *shelf)
+{
+  return shelf -> item.price;
+}
+
+char * get_shelf_num(shelf *shelf)
+{
+  return shelf -> shelf_num;
+}
+
+int get_num_items(shelf *shelf)
+{
+  return shelf -> num_items;
 }
 
 
@@ -118,46 +130,29 @@ warehouse * new_warehouse()
 
 
 
-// Declarse the variables of item
-void create_new_shelf_aux(shelf *item, char *name, char *description, int price)
-{
-  item -> name = name;
-  item -> description = description;
-  item -> price = price;
-}
-
-// Creates a new item
-item * create_new_shelf(char *name, char *description, int price)
-{
-  item *new_shelf = (item *) malloc(sizeof(item));
-  assert(new_shelf != NULL);
-
-  create_new_shelf_aux(new_shelf, name, description, price);
-
-  return new_shelf;
-}
-
-// -----
-
 // Declares the variables of shelf
 void create_new_shelf_aux(shelf *shelf, char *name, char *description, int price,
-		  char *shelf_num, int num_shelfs)
+		  char *shelf_num, int num_items)
 {
-  shelf -> item = create_new_shelf(name, description, price);
+  shelf -> item.name = name;
+  shelf -> item.description = description;
+  shelf -> item.price = price;
+  
   shelf -> shelf_num = shelf_num;
-  shelf -> num_shelfs = num_shelfs;
+  shelf -> num_items = num_items;
+
   shelf -> next_shelf = NULL;
 }
 
 // Creates a new shelf
 shelf * create_new_shelf(char *name, char *description, int price,
-		  char *shelf_num, int num_shelfs)
+		  char *shelf_num, int num_items)
 {
-  shelf *shelf = (shelf*) malloc(sizeof(shelf));
+  shelf *shelf = (struct shelf *) malloc(sizeof(struct shelf));
   assert(shelf != NULL);
 
-  create_new_shelf_aux(shelf, char *name, char *description, int price,
-		       char *shelf_num, int num_shelfs);
+  create_new_shelf_aux(shelf, name, description, price,
+		        shelf_num, num_items);
 
   return shelf;
 }
@@ -168,22 +163,23 @@ shelf * create_new_shelf(char *name, char *description, int price,
 
 // adds a new item to warehouse_list
 void add_shelf(warehouse *warehouse_list, char *name, char *description, int price,
-	      char *shelf_num, int num_shelfs)
+	      char *shelf_num, int num_items)
 {
   // create new shelf
-  new_shelf = create_new_shelf(name, description, price, shelf_num, num_shelfs);
+  shelf *shelf = create_new_shelf(name, description, price, shelf_num, num_items);
+  struct shelf *end_shelf = NULL;
   
   // check: is warehouse empty?
   if(warehouse_list -> first_shelf == NULL)
     {
       // yes: put first in list
-      warehouse_list -> first_shelf = new_shelf;
+      warehouse_list -> first_shelf = shelf;
     }
   else
     {
       // no: append to last element
-      last_shelf = get_last_shelf(warehouse_list);
-      last_shelf -> next_shelf = shelf;
+      end_shelf = get_last_shelf(warehouse_list);
+      end_shelf -> next_shelf = shelf;
     }
 }
 
@@ -198,8 +194,8 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
 // Remove shelf at index in warehouse_list
 void remove_shelf(warehouse *warehouse_list, int index)
 {
-  prev_shelf = get_shelf(warehouse_list, index-1);
-  shelf = prev_shelf -> next_shelf;
+  shelf *prev_shelf = get_shelf(warehouse_list, index-1);
+  shelf *shelf = prev_shelf -> next_shelf;
   
   prev_shelf -> next_shelf = shelf -> next_shelf;
   free(shelf);
@@ -214,15 +210,13 @@ void remove_shelf(warehouse *warehouse_list, int index)
 
 
 void edit_shelf(shelf *shelf, char *name, char *description, int price,
-	       char *shelf_num, int quantity)
+	       char *shelf_num, int num_items)
 {
-  item = shelf -> item;
-
-  item -> name = name;
-  item -> description = description;
-  item -> price = price;
+  shelf -> item.name = name;
+  shelf -> item.description = description;
+  shelf -> item.price = price;
   shelf -> shelf_num = shelf_num;
-  shelf -> quantity = quantity;
+  shelf -> num_items = num_items;
 }
 
 
@@ -236,7 +230,8 @@ void edit_shelf(shelf *shelf, char *name, char *description, int price,
 // destroys the entire warehouse
 void destroy_warehouse(warehouse *warehouse_list)
 {
-  shelf = warehouse_list -> first_shelf;
+  shelf *shelf = warehouse_list -> first_shelf;
+  struct shelf *tmp_shelf = NULL;
 
   while(shelf != NULL)
     {

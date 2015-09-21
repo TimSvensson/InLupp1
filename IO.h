@@ -18,3 +18,12 @@ void edit_item_IO();
 void exit_warehouse();
 
 int ask_int_q(char* question);
+
+
+
+//Tim
+// prints a shelf to the console
+void print_shelf(shelf *shelf);
+
+// prints 20 shelfs and numbers them starting from zero. Returns the last element printed
+shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
