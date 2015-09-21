@@ -1,10 +1,6 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include "backend.h"
-#include "warehouse.h"
+
+#include "database.h" //behövs detta?
+#include "IO.h"
 
 struct warehouse_header *warehouse_list =
   (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
@@ -95,7 +91,7 @@ void print_add_item(char* name, char* description, int price, char* ware_loc, in
   printf("Amount: %i\n", quantity);
 }
 
-void add_item_aux(void)
+void add_item_IO(void)
 {
   puts("---------------------------------");
   char* name;
@@ -104,7 +100,7 @@ void add_item_aux(void)
   char* ware_loc; 
   int quantity;
   
-  name = ask_str_q ("Name/Ware: ");
+  name = ask_str_q ("Name: ");
   description = ask_str_q ("Description: ");
   price = ask_int_q ("Price:");
   ware_loc = ask_str_q ("Warehouse location: ");
@@ -117,7 +113,7 @@ void add_item_aux(void)
   if (ask_yn("\nSave this ware? y/n") == 1)
     {
       //add_item(name, description, price, ware_loc, quantity);
-      puts("Item added!");
+      printf("%s added to the warehouse!\n", name);
      
     }
   else
@@ -129,7 +125,7 @@ void add_item_aux(void)
 
 
   
-void remove_item_aux(void) //den här funktionen är sjukt oklar
+void remove_item_IO(void) //den här funktionen är sjukt oklar
 {
   if (ask_yn("Remove this ware? y/n") == 1)
     {
@@ -142,7 +138,7 @@ void remove_item_aux(void) //den här funktionen är sjukt oklar
     }    
 }
 
-void edit_item_aux()
+void edit_item_IO()
 {
   warehouse_t* item = edit_item();
   int cont = 1;
@@ -192,59 +188,6 @@ int exit_warehouse()
     }
 }
 
-void print_main_menu()
-{
-  puts("\n----- MAIN MENU ----------------------");
-  puts("--------------------------------------");
-  puts("What would you like to do?");
-  puts("1. Add a ware");
-  puts("2. Remove a ware");
-  puts("3. Edit a ware");
-  puts("4. Undo the last action");
-  puts("5. List all wares in the database");
-  puts("0. Exit program");
-
-}
-
-void main_menu()
-{ 
-  bool cont = true;
-  
-  while (cont)
-    {
-      print_main_menu();
-      int answer;
-      answer = ask_int_q("");
-      while (answer > 5 || answer < 0)
-	{
-	  answer = ask_int_q("That's not an option. Please try again with a number between 0-5.");
-	}
-      switch (answer)
-	{
-	case 1:  add_item_aux(); break;
-	case 2:  remove_item_aux(); break;
-	case 3:  edit_item_aux (); break;
-	case 4:  puts("undo_action anropas"); break;
-	case 5:  print_warehouse(); break;
-	case 0:
-	  if (exit_warehouse() == 0)
-	    {
-	      cont = false;
-	    }
-	  else
-	    {
-	      cont = true;
-	    }
-	  break;
-	default: puts ("defaaaaauuuuuult");	    
-	}
-    } 
-}
 
 
-int main(void)
-{
-  puts("\nWelcome to our warehouse program!");
-  main_menu();
-  return 0;
-}
+
