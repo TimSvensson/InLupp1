@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct warehouse warehouse;
+typedef struct shelf shelf;
+typedef struct item item;
 
 // Creates a new warehouse
 warehouse * new_warehouse();
