@@ -33,14 +33,11 @@ void clear (void)
 char* ask_str_q (char *question)
 {
   puts(question);
-  char reply[256];
-  char* stripped_reply;
+  char *reply;
   fgets(reply, sizeof(reply), stdin);
   
-  printf("Reply = %s", reply);
-  stripped_reply = strip (reply);
-  printf("Stripped = %s \n", stripped_reply);
-  return strdup(stripped_reply); // anropa free någon gång i framtiden...
+  reply = strip (reply);
+  return strdup(reply); // anropa free någon gång i framtiden...
 }
 
 
@@ -179,10 +176,6 @@ void undo(void)
   puts("hej hej");
 }
   
-void list_all_items(void)
-{
-  puts("hej hej");
-}
 
 int exit_warehouse()
 {
@@ -230,9 +223,9 @@ void main_menu()
 	{
 	case 1:  add_item_aux(); break;
 	case 2:  remove_item_aux(); break;
-	case 3:  puts("edit_item anropas")/*edit_item ()*/; break;
-	case 4:  puts("undo_action anropas") /*undo_action()*/; break;
-	case 5:  puts("print_warehouse anropas")/* print_warehouse()*/; break;
+	case 3:  edit_item_aux (); break;
+	case 4:  puts("undo_action anropas"); break;
+	case 5:  print_warehouse(); break;
 	case 0:
 	  if (exit_warehouse() == 0)
 	    {
