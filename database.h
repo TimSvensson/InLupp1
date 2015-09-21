@@ -11,16 +11,17 @@ typedef struct item item;
 warehouse * new_warehouse();
 
 // adds a new item to the shelf
-void add_item(warehouse *warehouse_list, char *name, char *description, int price,
+void add_shelf(warehouse *warehouse_list, char *name, char *description, int price,
 	      char *shelf_num, int quantity);
 
 // removes an item, based on index in list.
-void remove_item(warehouse *warehouse_list, int index);
+void remove_shelf(warehouse *warehouse_list, int index);
 
 // edit item, selected by index
-void edit_item(shelf *shelf, char *name, char *description, int price,
+void edit_shelf(shelf *shelf, char *name, char *description, int price,
 	       char *shelf_num, int quantity);
 
+// gets address to shelf at index in warehouse_list
 shelf * get_shelf(warehouse *warehouse_list, int index);
 
 // undos the latest action
