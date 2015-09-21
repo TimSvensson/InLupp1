@@ -51,8 +51,9 @@ void add_item(char *name, char *description, int price,
 void remove_item();
 // edit item, selected by index
 warehouse_t * edit_item();
-// print item, base on index
+// print item, based on pointer
 void print_item(warehouse_t *item);
+void print_item_numbers(warehouse_t *item);
 // displays the entire warehouse
 void print_warehouse();
 // free up memory used by program
