@@ -28,16 +28,31 @@ struct warehouse
   struct warehouse *ptr_next_item;
 };
 
+typedef enum
+  {
+    ADD_ACTION,
+    REMOVE_ACTION,
+    EDIT_ACTION,
+    NO_ACTION
+  } enum_action;
+
+typedef struct prev_state
+{
+  enum_action prev_action;
+  warehouse_t prev_warehouse;
+  int index;
+} prev_state;
+
 // adds a new item to the warehouse
 void add_item(char *name, char *description, int price,
 	      char *ware_loc, int quantity);
 
 // removes an item, based on index in list.
-void remove_item(int i);
+void remove_item();
 // edit item, selected by index
-warehouse_t * edit_item(int i);
+warehouse_t * edit_item();
 // print item, base on index
-void print_item(int i);
+void print_item(warehouse_t *item);
 // displays the entire warehouse
 void print_warehouse();
 // free up memory used by program

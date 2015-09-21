@@ -1,10 +1,13 @@
 #include "backend.h"
-#include "warehouse.h"
+
 
 
 //-----
 
 
+
+struct warehouse_header *warehouse_list =
+  (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
 
 
 
@@ -47,6 +50,25 @@ int get_y()
     }
 
   return 0;
+}
+
+int choose_item()
+{
+  printf("Choose an item or press 0\n> ");
+  int ans;
+  scanf("%d", &ans);
+  return ans;
+}
+
+warehouse_t * get_address(warehouse_t * item, int end)
+{
+  for(int i = 1; i <= end; ++i, item = item -> ptr_next_item)
+    {
+      if(i == end)
+	return item;
+    }
+
+  return NULL;
 }
 
 warehouse_t * find_item(int i);
@@ -108,9 +130,92 @@ void add_item(char *name, char *description, int price,
 //----- REMOVE -----
 //==================
 
+warehouse_t * find_prev_item(warehouse_t * item_start, int goal)
+{
+  warehouse_t *ret_val = NULL;
+  warehouse_t *tmp_val = item_start;
+  
+  for(int i = 1; i < goal; ++i)
+    {
+      tmp_val = tmp_val -> ptr_next_item;
+
+      if(i == goal - 1)
+	{
+	  ret_val = tmp_val;
+	}
+    }
+
+  return ret_val;
+}
+
+void remove_item_at(warehouse_t *crnt_item, warehouse_t *prev_item)
+{
+  assert(crnt_item != NULL);
+
+  if(prev_item == NULL)
+    {
+      warehouse_list -> ptr_top = crnt_item;
+    }
+  else
+    {
+      prev_item -> ptr_next_item = crnt_item -> ptr_next_item;
+    }
+
+  //crnt_item -> ptr_next_item = NULL;
+  free(crnt_item);
+  
+  printf("ITEM REMOVED");
+}
 
 //TODO
-void remove_item(int i);
+void remove_item()
+{
+  if(warehouse_empty())
+    {
+      print_empty();
+    }
+  else
+    {
+      //print items
+      warehouse_t * crnt_item = NULL;
+      warehouse_t * next_item = warehouse_list -> ptr_top;
+  
+      while(1)
+	{
+	  crnt_item = next_item;
+      
+	  next_item = print_20(crnt_item);
+	  printf("\n");
+
+	  int ans = choose_item();
+
+	  if(ans == 0)
+	    {
+	      // ask: exit or next 20
+	      printf("Show next list of items?\n> ");
+	      if(!get_y())
+		{
+		  printf("Good bye");
+		  break;
+		}
+	    }
+	  else if(ans > 0 && ans <= 20)
+	    {
+	      warehouse_t *tmp_val = find_prev_item(crnt_item, ans);
+	      assert(tmp_val != NULL);
+	      
+	      remove_item_at(tmp_val -> ptr_next_item, tmp_val);
+	      break;
+	    }
+	  else
+	    {
+	      // incorrect input
+	      printf("Incorect input, try again!\n");
+	      next_item = crnt_item;
+	    }
+	}
+    }
+}
 
 
 
@@ -118,26 +223,6 @@ void remove_item(int i);
 //----- EDIT -----
 //================
 
-
-
-int choose_item()
-{
-  printf("Choose an item or press 0");
-  int ans;
-  scanf("%d", &ans);
-  return ans;
-}
-
-warehouse_t * get_address(warehouse_t * item, int end)
-{
-  for(int i = 1; i <= end; ++i, item = item -> ptr_next_item)
-    {
-      if(i == end)
-	return item;
-    }
-
-  return NULL;
-}
 
 //TODO
 warehouse_t * edit_item()
@@ -305,4 +390,18 @@ void destroy_warehouse()
 	  break;
 	}
     }
+}
+
+
+
+// =======================
+// ----- UNDO ACTION -----
+// =======================
+
+
+
+
+void undo_last_action()
+{
+  
 }
