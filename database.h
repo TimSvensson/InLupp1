@@ -24,4 +24,4 @@ shelf * get_shelf(warehouse *warehouse_list, int index);
 void undo_action(warehouse *warehouse_list);
 
 // free up memory used by program
-void destroy_warehouse();
+void destroy_warehouse(warehouse *warehouse_list);
