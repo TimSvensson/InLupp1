@@ -82,6 +82,25 @@ int ask_yn(char* question)
       return 0;}
 }
 
+<<<<<<< Updated upstream
+=======
+/* ------------------------------------------------------------------------
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------  */
+
+void print_shelf(shelf* shelf)
+{
+  item* item = shelf -> item;
+  
+  printf("Ware: %s\n", item -> name);
+  printf("Description: %s\n", item -> description);
+  printf("Price: %i\n", item -> price);
+  printf("Storage Location (shelf): %s\n", shelf -> shelf_num);
+  printf("Number of items: %i\n", shelf -> num_items);
+}
+
+/*
+>>>>>>> Stashed changes
 void print_add_item(char* name, char* description, int price, char* ware_loc, int quantity)
 {
   printf("Ware: %s\n", name);
@@ -89,7 +108,7 @@ void print_add_item(char* name, char* description, int price, char* ware_loc, in
   printf("Price: %i\n", price);
   printf("Warehouse Location: %s\n", ware_loc);
   printf("Amount: %i\n", quantity);
-}
+  } */
 
 void add_item_IO(void)
 {
@@ -108,7 +127,7 @@ void add_item_IO(void)
 
   puts("---------------------------------");
 
-  print_add_item (name, description, price, ware_loc, quantity);
+  //print_add_item (name, description, price, ware_loc, quantity);
 
   if (ask_yn("\nSave this ware? y/n") == 1)
     {
@@ -140,8 +159,14 @@ void remove_item_IO(void) //den här funktionen är sjukt oklar
 
 void edit_item_IO()
 {
-  warehouse_t* item = edit_item();
   int cont = 1;
+
+  char* name;
+  char* description;
+  int price;
+  char* shelf_num;
+  int num_items;
+  
   while (cont == 1)
     {
       print_item_numbers(item);
@@ -153,25 +178,35 @@ void edit_item_IO()
 	}
       switch (edit)
 	{
-	case 1: {
-	  item -> item_t.name = ask_str_q("Name: ");
-	} break;
-	case 2: {item -> item_t.description = ask_str_q("Description: ");} break;
-	case 3: {item -> item_t.price = ask_int_q("Price");} break;
-	case 4: {item -> ware_loc = ask_str_q("Warehouse Location: ");} break;
-	case 5: {item -> quantity = ask_int_q("Quantity: ");} break;
-	default: puts("defaaaauultttt");
+	case 1: {name = {ask_str_q("Name: ");} break;
+	  case 2: {description = ask_str_q("Description: ");} break;
+	  case 3: {price = ask_int_q("Price");} break;
+	  case 4: {shelf_num = ask_str_q("Warehouse Location: ");} break;
+	  case 5: {num_items = ask_int_q("Quantity: ");} break;
+	  default: puts("defaaaauultttt");
 	}
-      cont = ask_yn("Continue edit this item? y/n ");
+	  cont = ask_yn("Continue edit this item? y/n ");
+	}
+      puts("Item successfully updated");
+      // ask_yn("Edit another item? y/n ");
     }
-  puts("Item successfully updated");
-  // ask_yn("Edit another item? y/n ");
 }
+
+
+
+
+
+  
 void undo(void)
 {
   puts("hej hej");
 }
-  
+
+
+
+
+
+ 
 
 int exit_warehouse()
 {

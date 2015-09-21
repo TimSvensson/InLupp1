@@ -15,7 +15,7 @@ void remove_item_IO();
 
 void edit_item_IO();
 
-void exit_warehouse();
+int exit_warehouse();
 
 int ask_int_q(char* question);
 
