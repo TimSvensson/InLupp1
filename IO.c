@@ -32,7 +32,7 @@ char* ask_str_q (char *question)
   char *reply;
   fgets(reply, sizeof(reply), stdin);
   
-  reply = strip (reply);
+  *reply = *strip (reply);
   return strdup(reply); // anropa free någon gång i framtiden...
 }
 
@@ -82,33 +82,15 @@ int ask_yn(char* question)
       return 0;}
 }
 
-<<<<<<< Updated upstream
-=======
+/* <<<<<<< Updated upstream
+======= */
 /* ------------------------------------------------------------------------
 ------------------------------------------------------------------------ 
 ------------------------------------------------------------------------  */
 
-void print_shelf(shelf* shelf)
-{
-  item* item = shelf -> item;
-  
-  printf("Ware: %s\n", item -> name);
-  printf("Description: %s\n", item -> description);
-  printf("Price: %i\n", item -> price);
-  printf("Storage Location (shelf): %s\n", shelf -> shelf_num);
-  printf("Number of items: %i\n", shelf -> num_items);
-}
 
 /*
->>>>>>> Stashed changes
-void print_add_item(char* name, char* description, int price, char* ware_loc, int quantity)
-{
-  printf("Ware: %s\n", name);
-  printf("Description: %s\n", description);
-  printf("Price: %i\n", price);
-  printf("Warehouse Location: %s\n", ware_loc);
-  printf("Amount: %i\n", quantity);
-  } */
+>>>>>>> Stashed changes */
 
 void add_item_IO(void)
 {
@@ -169,7 +151,7 @@ void edit_item_IO()
   
   while (cont == 1)
     {
-      print_item_numbers(item);
+     // print_shelf(); här ska argumentet vara en shelf
       int edit;
       edit =  ask_int_q("What would you like to edit?");
   
@@ -178,7 +160,7 @@ void edit_item_IO()
 	}
       switch (edit)
 	{
-	case 1: {name = {ask_str_q("Name: ");} break;
+	case 1: {name = ask_str_q("Name: ");} break;
 	  case 2: {description = ask_str_q("Description: ");} break;
 	  case 3: {price = ask_int_q("Price");} break;
 	  case 4: {shelf_num = ask_str_q("Warehouse Location: ");} break;
@@ -190,10 +172,6 @@ void edit_item_IO()
       puts("Item successfully updated");
       // ask_yn("Edit another item? y/n ");
     }
-}
-
-
-
 
 
   
@@ -203,10 +181,6 @@ void undo(void)
 }
 
 
-
-
-
- 
 
 int exit_warehouse()
 {
@@ -225,17 +199,17 @@ int exit_warehouse()
 
 
 // ----- TIM -----
-
+/*
 void print_shelf(shelf *shelf)
 {
   item = shelf -> item;
   
   printf("\n");
-  printf("Name\t\t%s\n", item -> name);
-  printf("Description\t%s\n", item -> description);
-  printf("Price\t\t%d\n", item -> prics);
-  printf("Shelf number\t%s\n", shelf -> shelf_num);
-  printf("Number of items\t%d\n", shelf -> num_items);
+  printf("Name:\t\t%s\n", item -> name);
+  printf("Description:\t%s\n", item -> description);
+  printf("Price:\t\t%d\n", item -> price);
+  printf("Shelf number:\t%s\n", shelf -> shelf_num);
+  printf("Number of items:\t%d\n", shelf -> num_items);
 }
 
 void print_name(shelf *shelf)
@@ -268,4 +242,4 @@ shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
     }
 
   return shelf;
-}
+} */
