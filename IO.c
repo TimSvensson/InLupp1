@@ -1,9 +1,5 @@
-
 #include "database.h" //behövs detta?
 #include "IO.h"
-
-struct warehouse_header *warehouse_list =
-  (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
 
 char* strip (char* str)
 {
@@ -17,6 +13,7 @@ char* strip (char* str)
     }
   return str;
 }
+
 void clear (void)
 {
   bool newline_found; 
@@ -25,6 +22,9 @@ void clear (void)
   } while (newline_found);
 }
 
+/* ------------------------------------------------------------------------
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------  */
 
 char* ask_str_q (char *question)
 {
@@ -81,6 +81,22 @@ int ask_yn(char* question)
     {
       return 0;}
 }
+
+/* ------------------------------------------------------------------------
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------  */
+
+void print_shelf(shelf* shelf)
+{
+  item* item = shelf -> item;
+  
+  printf("Ware: %s\n", item -> name);
+  printf("Description: %s\n", item -> description);
+  printf("Price: %i\n", item -> price);
+  printf("Storage Location (shelf): %s\n", shelf -> shelf_num);
+  printf("Number of items: %i\n", shelf -> num_items);
+}
+
 
 void print_add_item(char* name, char* description, int price, char* ware_loc, int quantity)
 {

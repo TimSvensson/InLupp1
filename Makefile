@@ -1,19 +1,25 @@
 CC=gcc
 
-all: warehouse
+all: main
 
-warehouse: warehouse.c backend.o
-	$(CC) -Wall -std=c11 -ggdb warehouse.c backend.o -o warehouse
+warehouse: main.c b.o
+	$(CC) -Wall -std=c11 -ggdb main.c menu.o IO.o database.o -o main
 
-backend.o: backend.c
-	$(CC) -Wall -std=c11 -ggdb backend.c -c
+menu.o: menu.c
+	$(CC) -Wall -std=c11 -ggdb menu.c -c
 
-run: warehouse #run är beroende av warehouse
+IO.o: IO.c
+	$(CC) -Wall -std=c11 -ggdb IO.c -c
+
+database.o: database.c
+	$(CC) -Wall -std=c11 -ggdb database.c -c
+
+run: main #run är beroende av warehouse
 	@echo "Running program, woho!"
 
-	@./warehouse #om man inte vill att terminalen skriver ut ./warehouse kan man lägga till @ innan
+	@./main #om man inte vill att terminalen skriver ut ./warehouse kan man lägga till @ innan
 
 clean:
-	rm -f warehouse #-f betyder att om filen inte existerar händer ingenting
+	rm -f main #-f betyder att om filen inte existerar händer ingenting
 	rm *.o
 	rm -r *.dSYM

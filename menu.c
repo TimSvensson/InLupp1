@@ -1,3 +1,6 @@
+#include "database.h"
+
+
 void print_main_menu()
 {
   puts("\n----- MAIN MENU ----------------------");
@@ -14,7 +17,7 @@ void print_main_menu()
 
 void main_menu()
 { 
-  bool cont = true;
+  int cont = 1;
   
   while (cont)
     {
@@ -33,14 +36,9 @@ void main_menu()
 	case 4:  puts("undo_action anropas"); break;
 	case 5:  puts("här ska varor listas"); break;
 	case 0:
-	  if (exit_warehouse() == 0)
-	    {
-	      cont = false;
-	    }
-	  /*  else
-	    {
-	      cont = true;
-	      } */
+	  {
+	    cont = exit_warehouse();
+	  }
 	  break;
 	default: puts ("defaaaaauuuuuult");	    
 	}
