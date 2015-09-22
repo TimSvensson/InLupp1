@@ -199,23 +199,20 @@ int exit_warehouse()
 
 
 // ----- TIM -----
-/*
+
 void print_shelf(shelf *shelf)
-{
-  item = shelf -> item;
-  
+{ 
   printf("\n");
-  printf("Name:\t\t%s\n", item -> name);
-  printf("Description:\t%s\n", item -> description);
-  printf("Price:\t\t%d\n", item -> price);
-  printf("Shelf number:\t%s\n", shelf -> shelf_num);
-  printf("Number of items:\t%d\n", shelf -> num_items);
+  printf("Name\t\t%s\n", shelf -> item.name);
+  printf("Description\t%s\n", shelf -> item.description);
+  printf("Price\t\t%d\n", shelf -> item.prics);
+  printf("Shelf number\t%s\n", shelf -> shelf_num);
+  printf("Number of items\t%d\n", shelf -> num_items);
 }
 
 void print_name(shelf *shelf)
 {
-  item = shelf -> item;
-  printf("Name\t%s", item -> name);
+  printf("Name\t%s", shelf -> item.name);
 }
 
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
@@ -225,7 +222,7 @@ shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
   //If we are to start from the begining of the warehouse
   if(shelf_start == NULL)
     {
-      start == warehouse_list -> first_shelf;
+      shelf == warehouse_list -> first_shelf;
     }
   else
     {
@@ -242,4 +239,4 @@ shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
     }
 
   return shelf;
-} */
+}
