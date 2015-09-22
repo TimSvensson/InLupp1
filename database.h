@@ -38,5 +38,6 @@ char * get_description(shelf *shelf);
 int get_price(shelf *shelf);
 char * get_shelf_num(shelf *shelf);
 int get_num_items(shelf *shelf);
+shelf * get_next_shelf(shelf *shelf);
 
 shelf * get_first(warehouse * warehouse_list);
