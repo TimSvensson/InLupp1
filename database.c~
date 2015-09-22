@@ -38,7 +38,6 @@ struct prev_state
 };
 
 
-
 // ===============
 // ----- AUX -----
 // ===============
@@ -105,16 +104,6 @@ char * get_shelf_num(shelf *shelf)
 int get_num_items(shelf *shelf)
 {
   return shelf -> num_items;
-}
-
-shelf * get_next_shelf(shelf *shelf)
-{
-  return shelf -> next_shelf;
-}
-
-shelf * get_first(warehouse * warehouse_list)
-{
-  return warehouse_list -> first_shelf;
 }
 
 

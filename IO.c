@@ -2,8 +2,6 @@
 #include "database.h" //behövs detta? JA!!! /Tim
 #include "IO.h"
 
-struct warehouse_header *warehouse_list =
-  (struct warehouse_header*) malloc(sizeof(struct warehouse_header));
 
 char* strip (char* str)
 {
@@ -120,7 +118,7 @@ void add_item_IO(void)
   else
     {
       puts("Item NOT added");
-      } 
+    }
   
 }
 
@@ -178,6 +176,7 @@ void edit_item_IO()
 void undo(void)
 {
   puts("hej hej");
+  //undo_action(warehouse_list);
 }
 
 
@@ -203,26 +202,26 @@ int exit_warehouse()
 void print_shelf(shelf *shelf)
 { 
   printf("\n");
-  printf("Name\t\t%s\n", shelf -> item.name);
-  printf("Description\t%s\n", shelf -> item.description);
-  printf("Price\t\t%d\n", shelf -> item.prics);
-  printf("Shelf number\t%s\n", shelf -> shelf_num);
-  printf("Number of items\t%d\n", shelf -> num_items);
+  printf("Name\t\t%s\n", get_name(shelf));
+  printf("Description\t%s\n", get_description(shelf));
+  printf("Price\t\t%d\n", get_price(shelf));
+  printf("Shelf number\t%s\n", get_shelf_num(shelf));
+  printf("Number of items\t%d\n", get_num_items(shelf));
 }
 
-void print_name(shelf *shelf)
+void print_name(struct shelf *shelf)
 {
-  printf("Name\t%s", shelf -> item.name);
+  printf("Name\t%s", get_name(shelf));
 }
 
-shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
+shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
 {
-  void* shelf;
+  shelf* shelf = NULL;
   
   //If we are to start from the begining of the warehouse
   if(shelf_start == NULL)
     {
-      shelf == warehouse_list -> first_shelf;
+      shelf = get_first(warehouse_list);
     }
   else
     {
@@ -235,7 +234,7 @@ shelf * print_20(warehouse *warehouse_list, shelf *shelf_start)
       print_name(shelf);
       printf("\n");
 
-      shelf = shelf -> next_shelf;
+      shelf = get_next_shelf(shelf);
     }
 
   return shelf;
