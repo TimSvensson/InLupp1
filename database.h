@@ -30,7 +30,7 @@ void undo_action(warehouse *warehouse_list);
 // free up memory used by program
 void destroy_warehouse(warehouse *warehouse_list);
 
-
+shelf * get_last_shelf(warehouse *warehouse_list); //Karro testar
 
 char * get_name(shelf *shelf);
 char * get_description(shelf *shelf);
