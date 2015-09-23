@@ -94,7 +94,7 @@ int ask_yn(char* question)
 /*
 >>>>>>> Stashed changes */
 
-void add_item_IO(void)
+void add_shelf_IO(void)
 {
   puts("---------------------------------");
   char* name;
@@ -170,7 +170,7 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	  }
 	cont = ask_yn("Continue edit this item? y/n ");
       }
-    edit_shelf (warehouse_list, choosed_shelf, name, description, price, shelf_num, num_items);
+    edit_shelf (choosed_shelf, name, description, price, shelf_num, num_items);
     puts("Item successfully updated");
   }
 }
@@ -186,10 +186,8 @@ void edit_shelf_IO(warehouse* warehouse_list, shelf* shelf)
       shelf = NULL;
       int answer;
       int cont = 1;
-      // shelf* next_shelfs;
       int index;
       int page = 0;
-      //   shelf* choosed_shelf;
       shelf = print_20(warehouse_list, shelf);
   
       while (cont)
