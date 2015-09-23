@@ -130,7 +130,7 @@ void add_shelf_IO(warehouse *warehouse_list)
 
 
   
-void remove_shelf_IO(void) //den här funktionen är sjukt oklar
+void remove_shelf_IO(warehouse_list, index) //den här funktionen är sjukt oklar
 {
   if (ask_yn("Remove this item? y/n") == 1)
     {
@@ -152,7 +152,7 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
   int price;
   char* shelf_num;
   int num_items;
-  {while (cont == 1)
+  {while (cont)
       {
 	print_shelf(choosed_shelf);
 	int edit;
@@ -163,11 +163,21 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	  }
 	switch (edit)
 	  {
-	  case 1: {name = ask_str_q("Name: ");} break;
-	  case 2: {description = ask_str_q("Description: ");} break;
-	  case 3: {price = ask_int_q("Price");} break;
-	  case 4: {shelf_num = ask_str_q("Warehouse Location: ");} break;
-	  case 5: {num_items = ask_int_q("Quantity: ");} break;
+	  case 1: {
+	    print_name(choosed_shelf));
+	    name = ask_str_q("New name: ");} break;
+	  case 2: {
+	    print_description(choosed_shelf));
+	    description = ask_str_q("New description: ");} break;
+	  case 3: {
+	    print_price(choosed_shelf));
+	    price = ask_int_q("New price");} break;
+	  case 4: {
+	    print_shelf_num(choosed_shelf));
+	    shelf_num = ask_str_q("New shelf number: ");} break;
+	  case 5: {
+	    print_num_items(choosed_shelf));
+	    num_items = ask_int_q("New quantity: ");} break;
 	  default: puts("defaaaauultttt");
 	  }
 	cont = ask_yn("Continue edit this item? y/n ");
@@ -194,25 +204,38 @@ void edit_shelf_IO(warehouse* warehouse_list)
   
       while (cont)
 	{
-	  answer = ask_int_q ("Which item would you like to edit? Answer with a number between 1-20. If you would like to see the next 20 items, answer '21' ");
-  
-	  while (answer < 1 || 21 < answer)
-	    {answer = ask_int_q("That's not an option. Please try again with a number between 1-21");
-	    }    
+	  answer = ask_int_q("What would you like to do? \n
+1. Choose an item to edit\n
+2. See next 20 items\n
+3. Exit (back to main menu)");
 
-	  if (answer == 21)
+
+	  if (answer == 1)
+	    {
+	      ask_int_q ("Which item would you like to edit? Answer with a number between 1-20.");
+
+	      while (answer < 1 || 20 < answer)
+		{
+		  answer = ask_int_q("That's not an option. Please try again with a number between 1-20"); }
+
+	      {
+		index = page * 20 + answer - 1;
+		cont = 0;
+		shelf = get_shelf (warehouse_list, index);
+		edit_shelf_IO_aux(warehouse_list, shelf);
+		continue_edit = ask_yn("Edit another item? y/n");
+	      }
+	    }
+	  else if (answer == 2)
 	    {
 	      page = page +1;
 	      shelf = print_20(warehouse_list, shelf);
 	    }
 	  else
 	    {
-	      index = page * 20 + answer - 1;
-	      cont = 0;
-	      shelf = get_shelf (warehouse_list, index); 
-	    }
-	  edit_shelf_IO_aux(warehouse_list, shelf);
-	  continue_edit = ask_yn("Edit another item? y/n");
+	      break
+		}
+	  
 	}  
     }
 }
@@ -245,7 +268,7 @@ int exit_warehouse()
 }
 
 
-// ----- TIM -----
+// PRINT FUNCTIONS -----------------------------------
 
 void print_shelf(shelf *shelf)
 { 
@@ -258,9 +281,19 @@ void print_shelf(shelf *shelf)
 }
 
 void print_name(struct shelf *shelf)
-{
-  printf("Name\t%s", get_name(shelf));
-}
+{ printf("Name\t\t%s", get_name(shelf)); }
+
+void print_description(struct shelf *shelf)
+{ printf("Description:\t%s", get_description(choosed_shelf)); }
+	    
+void print_price(struct shelf *shelf)
+{ printf("Price:\t\t%d", get_price(choosed_shelf)); }
+	  
+void print_shelf_num(struct shelf *shelf)
+{ printf("Shelf number:\t%s", get_shelf_num(choosed_shelf)); }
+	   
+void print_num_items(struct shelf *shelf):
+{ printf("Number of items:\t%d", get_num_items(choosed_shelf)); }
 
 shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
 {
