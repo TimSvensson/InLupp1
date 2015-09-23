@@ -32,9 +32,9 @@ void main_menu()
 	}
       switch (answer)
 	{
-	case 1:  add_item_IO(); break;
-	case 2:  remove_item_IO(); break;
-	case 3:  edit_item_IO (); break;
+	case 1:  add_shelf_IO(); break;
+	case 2:  remove_shelf_IO(); break;
+	case 3:  edit_shelf_IO (); break;
 	case 4:  puts("undo_action anropas"); break;
 	case 5:  puts("här ska varor listas"); break;
 	case 0:
