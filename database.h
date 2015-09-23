@@ -8,14 +8,9 @@
 
 typedef struct warehouse warehouse;
 typedef struct shelf shelf;
-typedef struct prev_state prev_state;
-
 
 // Creates a new warehouse
 warehouse * new_warehouse();
-
-// Create a new previous state, used to undo actions
-prev_state * new_prev_state();
 
 // adds a new item to the shelf
 void add_shelf(warehouse *warehouse_list, char *name, char *description, int price, char *shelf_num, int num_items);

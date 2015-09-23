@@ -90,38 +90,45 @@ int ask_yn(char* question)
       return 0;}
 }
 
-/* <<<<<<< Updated upstream
-======= */
-/* ------------------------------------------------------------------------
------------------------------------------------------------------------- 
-------------------------------------------------------------------------  */
 
 
-/*
->>>>>>> Stashed changes */
+void print_add_shelf(char *name, char *description, int price, char *ware_loc, int num_items)
+{
+  printf("\n\n");
+  printf("=====\t\t=====");
+  printf("\tYour new Item\n");
+  printf(" Name\t\t%s\n", name);
+  printf(" Description\t%s\n", description);
+  printf(" Price\t\t%d\n", price);
+  printf(" Shelf number\t%s\n", ware_loc);
+  printf(" Number of items\t%d\n", num_items);
+  printf("\n");
+  printf("=====\t\t=====\n\n");
+}
 
 void add_shelf_IO(warehouse *warehouse_list)
 {
   puts("---------------------------------");
+  
   char* name;
   char* description;
   int price;
   char* ware_loc; 
-  int quantity;
-  
-  name = ask_str_q ("Name: ");
-  description = ask_str_q ("Description: ");
-  price = ask_int_q ("Price:");
-  ware_loc = ask_str_q ("Warehouse location: ");
-  quantity = ask_int_q ("Quantity:");
+  int num_items;
+
+  name = ask_str_q("Name\n> ");
+  description = ask_str_q("Description\n> ");
+  price = ask_int_q("Price\n> ");
+  ware_loc = ask_str_q("Warehouse location\n> ");
+  num_items = ask_int_q("Num_Items\n> ");
 
   puts("---------------------------------");
 
-  //print_add_item (name, description, price, ware_loc, quantity);
+  print_add_shelf(name, description, price, ware_loc, num_items);
 
   if (ask_yn("\nSave this ware? y/n") == 1)
     {
-      //add_item(name, description, price, ware_loc, quantity);
+      add_shelf(warehouse_list, name, description, price, ware_loc, num_items);
       printf("%s added to the warehouse!\n", name);
      
     }
@@ -134,28 +141,24 @@ void add_shelf_IO(warehouse *warehouse_list)
 
 
   
-void remove_shelf_IO(warehouse *warehouse_list, int index) //den här funktionen är sjukt oklar
+void remove_shelf_IO(warehouse *warehouse_list)
 {
-  if (ask_yn("Remove this item? y/n") == 1)
-    {
-      puts("Item removed!");
-      //remove_item (del_item);
-    }
-  else
-    {
-      puts("Item is still in warehouse");
-    }    
+  // find shelf to be removed
+  // remove item
 }
 
 
 
 void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf) 
-{  int cont = 1;
+{
+  int cont = 1;
+  
   char* name;
   char* description;
   int price;
   char* shelf_num;
   int num_items;
+
   {while (cont)
       {
 	print_shelf(choosed_shelf);
@@ -181,7 +184,7 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	    shelf_num = ask_str_q("New shelf number: ");} break;
 	  case 5: {
 	    print_num_items(choosed_shelf);
-	    num_items = ask_int_q("New quantity: ");} break;
+	    num_items = ask_int_q("New num_items: ");} break;
 	  default: puts("defaaaauultttt");
 	  }
 	cont = ask_yn("Continue edit this item? y/n ");

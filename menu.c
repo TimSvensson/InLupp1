@@ -1,5 +1,3 @@
-#include "database.h"
-#include "IO.h"
 #include "menu.h"
 
 
@@ -47,7 +45,7 @@ void main_menu()
 	  break;
 
 	case 3:
-	  edit_shelf_IO (warehouse_list);
+	  edit_shelf_IO(warehouse_list);
 	  break;
 
 	case 4:
