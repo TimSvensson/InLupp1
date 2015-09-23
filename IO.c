@@ -4,6 +4,10 @@
 void print_shelf(shelf *shelf);
 
 void print_name(shelf *shelf);
+void print_description(shelf *shelf);	    
+void print_price(shelf *shelf);	  
+void print_shelf_num(shelf *shelf);	   
+void print_num_items (shelf *shelf);
 
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
 
@@ -164,19 +168,19 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	switch (edit)
 	  {
 	  case 1: {
-	    print_name(choosed_shelf));
+	    print_name(choosed_shelf);
 	    name = ask_str_q("New name: ");} break;
 	  case 2: {
-	    print_description(choosed_shelf));
+	    print_description(choosed_shelf);
 	    description = ask_str_q("New description: ");} break;
 	  case 3: {
-	    print_price(choosed_shelf));
+	    print_price(choosed_shelf);
 	    price = ask_int_q("New price");} break;
 	  case 4: {
-	    print_shelf_num(choosed_shelf));
+	    print_shelf_num(choosed_shelf);
 	    shelf_num = ask_str_q("New shelf number: ");} break;
 	  case 5: {
-	    print_num_items(choosed_shelf));
+	    print_num_items(choosed_shelf);
 	    num_items = ask_int_q("New quantity: ");} break;
 	  default: puts("defaaaauultttt");
 	  }
@@ -204,42 +208,39 @@ void edit_shelf_IO(warehouse* warehouse_list)
   
       while (cont)
 	{
-	  answer = ask_int_q("What would you like to do? \n
-1. Choose an item to edit\n
-2. See next 20 items\n
-3. Exit (back to main menu)");
-
-
-	  if (answer == 1)
+	  answer = ask_int_q("What would you like to do? \n1. Choose an item to edit\n 2. See next 20 items\n3. Exit and go back to main menu");
+	  while (answer < 1 || 3 < answer)
 	    {
-	      ask_int_q ("Which item would you like to edit? Answer with a number between 1-20.");
+	      answer = ask_int_q("That's not an option. Please try again with a number between 1-3"); }
+	}
+      if (answer == 1)
+	{
+	  ask_int_q ("Which item would you like to edit? Answer with a number between 1-20.");
 
-	      while (answer < 1 || 20 < answer)
-		{
-		  answer = ask_int_q("That's not an option. Please try again with a number between 1-20"); }
+	  while (answer < 1 || 20 < answer)
+	    {
+	      answer = ask_int_q("That's not an option. Please try again with a number between 1-20"); }
 
-	      {
-		index = page * 20 + answer - 1;
-		cont = 0;
-		shelf = get_shelf (warehouse_list, index);
-		edit_shelf_IO_aux(warehouse_list, shelf);
-		continue_edit = ask_yn("Edit another item? y/n");
-	      }
-	    }
-	  else if (answer == 2)
+	  {
+	    index = page * 20 + answer - 1;
+	    cont = 0;
+	    shelf = get_shelf (warehouse_list, index);
+	    edit_shelf_IO_aux(warehouse_list, shelf);
+	    continue_edit = ask_yn("Edit another item? y/n");
+	  }
+	}
+      else if (answer == 2)
+	{
+	  page = page +1;
+	  shelf = print_20(warehouse_list, shelf);
+	}
+      else
 	    {
-	      page = page +1;
-	      shelf = print_20(warehouse_list, shelf);
-	    }
-	  else
-	    {
-	      break
+	      break;
 		}
 	  
 	}  
-    }
 }
- 
 
 
 
@@ -280,20 +281,30 @@ void print_shelf(shelf *shelf)
   printf("Number of items\t%d\n", get_num_items(shelf));
 }
 
-void print_name(struct shelf *shelf)
-{ printf("Name\t\t%s", get_name(shelf)); }
+void print_name(shelf *shelf)
+{
+  printf("Name\t\t%s", get_name(shelf));
+}
 
-void print_description(struct shelf *shelf)
-{ printf("Description:\t%s", get_description(choosed_shelf)); }
+void print_description(shelf *shelf)
+{
+  printf("Description:\t%s", get_description(shelf));
+}
 	    
-void print_price(struct shelf *shelf)
-{ printf("Price:\t\t%d", get_price(choosed_shelf)); }
+void print_price(shelf *shelf)
+{
+  printf("Price:\t\t%d", get_price(shelf));
+}
 	  
-void print_shelf_num(struct shelf *shelf)
-{ printf("Shelf number:\t%s", get_shelf_num(choosed_shelf)); }
+void print_shelf_num(shelf *shelf)
+{
+  printf("Shelf number:\t%s", get_shelf_num(shelf));
+}
 	   
-void print_num_items(struct shelf *shelf):
-{ printf("Number of items:\t%d", get_num_items(choosed_shelf)); }
+void print_num_items(shelf *shelf)
+{
+  printf("Number of items:\t%d", get_num_items(shelf));
+}
 
 shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
 {
