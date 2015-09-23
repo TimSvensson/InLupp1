@@ -24,7 +24,7 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
 // removes an item, based on index in list.
 void remove_shelf(warehouse *warehouse_list, int index);
 
-// edit item, selected by index
+// Edits a shelf. Updates the exsisting shelf (at address shelf) with the arguments passed to this function.
 void edit_shelf(shelf *shelf, char *name, char *description, int price,
 	       char *shelf_num, int num_items);
 
