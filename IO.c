@@ -134,7 +134,7 @@ void add_shelf_IO(warehouse *warehouse_list)
 
 
   
-void remove_shelf_IO(warehouse_list, index) //den här funktionen är sjukt oklar
+void remove_shelf_IO(warehouse *warehouse_list, int index) //den här funktionen är sjukt oklar
 {
   if (ask_yn("Remove this item? y/n") == 1)
     {
