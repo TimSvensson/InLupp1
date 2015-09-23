@@ -38,7 +38,6 @@ void main_menu()
       
       switch (answer)
 	{
-<<<<<<< Updated upstream
 	case 1:
 	  add_shelf_IO(warehouse_list);
 	  break;
@@ -59,13 +58,6 @@ void main_menu()
 	  puts("här ska varor listas");
 	  break;
 
-=======
-	case 1:  add_shelf_IO(); break;
-	case 2:  remove_shelf_IO(); break;
-	case 3:  edit_shelf_IO (warehouse* warehouse_list, NULL); break;
-	case 4:  puts("undo_action anropas"); break;
-	case 5:  puts("här ska varor listas"); break;
->>>>>>> Stashed changes
 	case 0:
 	  {
 	    cont = exit_warehouse();
