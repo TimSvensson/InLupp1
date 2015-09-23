@@ -7,6 +7,8 @@ void print_name(shelf *shelf);
 
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
 
+
+
 char* strip (char* str)
 {
   int len = strlen (str);
@@ -94,7 +96,7 @@ int ask_yn(char* question)
 /*
 >>>>>>> Stashed changes */
 
-void add_shelf_IO(void)
+void add_shelf_IO(warehouse *warehouse_list)
 {
   puts("---------------------------------");
   char* name;
@@ -178,12 +180,12 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 
 
 
-void edit_shelf_IO(warehouse* warehouse_list, shelf* shelf)
+void edit_shelf_IO(warehouse* warehouse_list)
 {
   int continue_edit = 1;
   while (continue_edit)
     {
-      shelf = NULL;
+      shelf *shelf = NULL;
       int answer;
       int cont = 1;
       int index;

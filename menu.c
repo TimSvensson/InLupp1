@@ -18,25 +18,46 @@ void print_main_menu()
 }
 
 void main_menu()
-{ 
+{
+
+  warehouse *warehouse_list = new_warehouse();
+  
   int cont = 1;
   
   while (cont)
     {
       print_main_menu();
+
       int answer;
       answer = ask_int_q("");
+
       while (answer > 5 || answer < 0)
 	{
-	  answer = ask_int_q("That's not an option. Please try again with a number between 0-5.");
+	  answer = ask_int_q("That's not an option. Please try again with a number between 0-5.");  
 	}
+      
       switch (answer)
 	{
-	case 1:  add_shelf_IO(); break;
-	case 2:  remove_shelf_IO(); break;
-	case 3:  edit_shelf_IO (); break;
-	case 4:  puts("undo_action anropas"); break;
-	case 5:  puts("här ska varor listas"); break;
+	case 1:
+	  add_shelf_IO(warehouse_list);
+	  break;
+
+	case 2:
+	  remove_shelf_IO(warehouse_list);
+	  break;
+
+	case 3:
+	  edit_shelf_IO (warehouse_list);
+	  break;
+
+	case 4:
+	  puts("undo_action anropas");
+	  break;
+
+	case 5:
+	  puts("här ska varor listas");
+	  break;
+
 	case 0:
 	  {
 	    cont = exit_warehouse();
@@ -44,5 +65,7 @@ void main_menu()
 	  break;
 	default: puts ("defaaaaauuuuuult");	    
 	}
-    } 
+    }
+
+  destroy_warehouse(warehouse_list);
 }

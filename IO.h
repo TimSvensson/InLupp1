@@ -12,11 +12,11 @@
 
 //funktioner som menu kallar på
 
-void add_shelf_IO();
+void add_shelf_IO(warehouse *warehouse_list);
 
-void remove_shelf_IO();
+void remove_shelf_IO(warehouse *warehouse_list);
 
-void edit_shelf_IO();
+void edit_shelf_IO(warehouse *warehouse_list);
 
 int exit_warehouse();
 
