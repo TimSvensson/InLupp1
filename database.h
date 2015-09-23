@@ -8,21 +8,25 @@
 
 typedef struct warehouse warehouse;
 typedef struct shelf shelf;
+typedef struct prev_state prev_state;
 
 
 // Creates a new warehouse
 warehouse * new_warehouse();
 
+// Create a new previous state, used to undo actions
+prev_state * new_prev_state();
+
 // adds a new item to the shelf
 void add_shelf(warehouse *warehouse_list, char *name, char *description, int price,
-	      char *shelf_num, int quantity);
+	      char *shelf_num, int num_items);
 
 // removes an item, based on index in list.
 void remove_shelf(warehouse *warehouse_list, int index);
 
 // edit item, selected by index
-void edit_shelf(warehouse *warehouse_list, shelf *shelf, char *name, char *description, int price,
-	       char *shelf_num, int quantity);
+void edit_shelf(shelf *shelf, char *name, char *description, int price,
+	       char *shelf_num, int num_items);
 
 // gets address to shelf at index in warehouse_list
 shelf * get_shelf(warehouse *warehouse_list, int index);

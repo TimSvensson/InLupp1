@@ -7,13 +7,6 @@
 
 
 
-// warehouse
-struct warehouse
-{
-  shelf *first_shelf;
-};
-
-
 // shelf, items are stored here
 struct shelf
 {
@@ -30,11 +23,27 @@ struct shelf
   shelf *next_shelf;
 };
 
+enum prev_action_e
+  {
+    NONE,
+    ADD,
+    REMOVE,
+    EDIT
+  };
+
+// previos state, used in undo
 struct prev_state
 {
-  enum_action prev_action;
-  shelf prev_warehouse;
-  int index;
+  enum prev_action_e prev_action;
+  shelf *old_shelf;
+  int old_index;
+};
+
+// warehouse
+struct warehouse
+{
+  shelf *first_shelf;
+  prev_state *last_action;
 };
 
 
@@ -44,6 +53,11 @@ struct prev_state
 // ===============
 
 
+// TODO!!!
+shelf * copy_shelf(shelf *shelf)
+{
+  
+}
 
 // Get the last element of warehouse_list
 shelf * get_last_shelf(warehouse *warehouse_list)
@@ -125,10 +139,37 @@ shelf * get_first(warehouse * warehouse_list)
 
 
 
+void init_prev_state(prev_state *prev_state)
+{
+  prev_state -> prev_action = NONE;
+  prev_state -> old_shelf = NULL;
+  prev_state -> old_index = 0;
+}
+
+prev_state * new_prev_State()
+{
+  prev_state *prev_state =
+    (struct prev_state*) malloc(sizeof(struct prev_state));
+
+  init_prev_state(prev_state);
+
+  return prev_state;
+}
+
+
+
+void init_warehouse(warehouse *warehouse_list)
+{
+  warehouse_list -> first_shelf = NULL;
+  warehouse_list -> last_action = new_prev_state();
+}
+
 warehouse * new_warehouse()
 {
   warehouse *warehouse_list =
     (warehouse*) malloc(sizeof(warehouse));
+
+  init_warehouse(warehouse_list);
 
   return warehouse_list;
 }
@@ -220,7 +261,7 @@ void remove_shelf(warehouse *warehouse_list, int index)
 
 
 
-void edit_shelf(warehouse* warehouse_list, shelf *shelf, char *name, char *description, int price,
+void edit_shelf(shelf *shelf, char *name, char *description, int price,
 	       char *shelf_num, int num_items)
 {
   shelf -> item.name = name;
@@ -263,7 +304,66 @@ void destroy_warehouse(warehouse *warehouse_list)
 
 
 
-void undo_last_action()
+void undo_last_action(warehouse *warehouse_list)
 {
+  prev_state *prev_state = warehouse_list -> last_action;
+  shelf *prev_shelf = NULL; // the shelf before the undo_shelf
+  shelf *undo_shelf = NULL; // the shelf that was added, removed or edited
   
+  switch(prev_state -> prev_action)
+    {
+    case ADD:
+      // remove that which was added
+      prev_shelf =
+	get_shelf(warehouse_list, prev_state -> old_index - 1);
+
+      // get the correct shelf
+      undo_shelf = prev_shelf -> next_shelf;
+      // set prev_shelf's next_shelf to the shelf after undo_shelf
+      prev_shelf -> next_shelf = undo_shelf -> next_shelf;
+      // free up the memory
+      free(undo_shelf);
+
+      prev_state -> prev_action = NONE;
+      break;
+
+    case REMOVE:
+      // add that which was removed
+      prev_shelf =
+	get_shelf(warehouse_list, prev_state -> old_index - 1);
+
+      // get the old shelf address
+      undo_shelf = prev_state -> old_shelf;
+      // set the correct next_shelf address in undo_shelf
+      undo_shelf -> next_shelf = prev_shelf -> next_shelf;
+      // set the correct address in prev_shelf
+      prev_shelf -> next_shelf = undo_shelf;
+
+      prev_state -> prev_action = NONE;
+      break;
+
+    case EDIT:
+      // return an item to it's former glory
+      prev_shelf =
+	get_shelf(warehouse_list, prev_state -> old_index - 1);
+
+      
+      undo_shelf = prev_state -> old_shelf;
+      undo_shelf -> next_shelf = prev_shelf -> next_shelf;
+
+      // destroy "new" version
+      free(prev_shelf -> next_shelf);
+      prev_shelf -> next_shelf = prev_state -> old_shelf;
+
+      prev_state -> prev_action = NONE;
+      break;
+
+    case NONE:
+      // tell user there's nothing to undo
+      break;
+      
+    default:
+      // something went wrong
+      break;
+    }
 }
