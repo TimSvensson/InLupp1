@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef DATABASE_H 
+#define DATABASE_H
 
 typedef struct warehouse warehouse;
 typedef struct shelf shelf;
@@ -19,7 +21,7 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
 void remove_shelf(warehouse *warehouse_list, int index);
 
 // edit item, selected by index
-void edit_shelf(shelf *shelf, char *name, char *description, int price,
+void edit_shelf(warehouse *warehouse_list, shelf *shelf, char *name, char *description, int price,
 	       char *shelf_num, int quantity);
 
 // gets address to shelf at index in warehouse_list
@@ -41,3 +43,5 @@ int get_num_items(shelf *shelf);
 shelf * get_next_shelf(shelf *shelf);
 
 shelf * get_first(warehouse * warehouse_list);
+
+#endif /* DATABASE_H */
