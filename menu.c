@@ -4,11 +4,10 @@
 void print_main_menu()
 {
   puts("\n----- MAIN MENU ----------------------");
-  puts("--------------------------------------");
-  puts("What would you like to do?");
-  puts("1. Add a ware");
-  puts("2. Remove a ware");
-  puts("3. Edit a ware");
+  puts("--------------------------------------\n");
+  puts("1. Add a item");
+  puts("2. Remove a item");
+  puts("3. Edit a item");
   puts("4. Undo the last action");
   puts("5. List all wares in the database");
   puts("0. Exit program");
@@ -27,7 +26,7 @@ void main_menu()
       print_main_menu();
 
       int answer;
-      answer = ask_int_q("");
+      answer = ask_int_q("\nWhat would you like to do?");
 
       while (answer > 5 || answer < 0)
 	{
