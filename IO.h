@@ -6,6 +6,9 @@
 
 #include "database.h"
 
+#ifndef IO_H 
+#define IO_H
+
 
 //funktioner som menu kallar på
 
@@ -27,3 +30,5 @@ void print_shelf(shelf *shelf);
 
 // prints 20 shelfs and numbers them starting from zero. Returns the last element printed
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
+
+#endif /* IO_H */

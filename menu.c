@@ -1,4 +1,6 @@
 #include "database.h"
+#include "IO.h"
+#include "menu.h"
 
 
 void print_main_menu()

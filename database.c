@@ -220,7 +220,7 @@ void remove_shelf(warehouse *warehouse_list, int index)
 
 
 
-void edit_shelf(shelf *shelf, char *name, char *description, int price,
+void edit_shelf(warehouse* warehouse_list, shelf *shelf, char *name, char *description, int price,
 	       char *shelf_num, int num_items)
 {
   shelf -> item.name = name;

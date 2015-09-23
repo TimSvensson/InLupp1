@@ -1,12 +1,12 @@
 
-#include "database.h" //behövs detta? JA!!! /Tim
+#include "database.h"
 #include "IO.h"
 
 void print_shelf(shelf *shelf);
 
-void print_name(struct shelf *shelf);
+void print_name(shelf *shelf);
 
-shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start);
+shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
 
 char* strip (char* str)
 {
@@ -144,7 +144,7 @@ void remove_shelf_IO(void) //den här funktionen är sjukt oklar
 
 
 
-void edit_shelf_IO_aux(shelf* shelf) 
+void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf) 
 {  int cont = 1;
   char* name;
   char* description;
@@ -153,7 +153,7 @@ void edit_shelf_IO_aux(shelf* shelf)
   int num_items;
   {while (cont == 1)
       {
-	print_shelf(shelf);
+	print_shelf(choosed_shelf);
 	int edit;
 	edit =  ask_int_q("What would you like to edit?");
   
@@ -171,7 +171,7 @@ void edit_shelf_IO_aux(shelf* shelf)
 	  }
 	cont = ask_yn("Continue edit this item? y/n ");
       }
-    edit_shelf(warehouse_list, name, description, price, shelf_num, num_items);
+    edit_shelf (warehouse_list, choosed_shelf, name, description, price, shelf_num, num_items);
     puts("Item successfully updated");
   }
 }
@@ -179,19 +179,19 @@ void edit_shelf_IO_aux(shelf* shelf)
 
 
 
-void edit_shelf_IO(warehouse* warehouse_list)
+void edit_shelf_IO(warehouse* warehouse_list, shelf* shelf)
 {
   int continue_edit = 1;
   while (continue_edit)
     {
-      shelf* shelf = NULL;
+      shelf = NULL;
       int answer;
       int cont = 1;
-      shelf* next_shelfs;
+      // shelf* next_shelfs;
       int index;
       int page = 0;
-      shelf* choosed_shelf;
-      next_shelfs = print_20(warehouse_list, shelf);
+      //   shelf* choosed_shelf;
+      shelf = print_20(warehouse_list, shelf);
   
       while (cont)
 	{
@@ -204,15 +204,15 @@ void edit_shelf_IO(warehouse* warehouse_list)
 	  if (answer == 21)
 	    {
 	      page = page +1;
-	      next_shelfs = print_20(warehouse_list, next_shelfs);
+	      shelf = print_20(warehouse_list, shelf);
 	    }
 	  else
 	    {
 	      index = page * 20 + answer - 1;
 	      cont = 0;
-	      choosed_shelf = get_shelf (warehouse_list, index); 
+	      shelf = get_shelf (warehouse_list, index); 
 	    }
-	  edit_shelf_IO_aux(choosed_shelf);
+	  edit_shelf_IO_aux(warehouse_list, shelf);
 	  continue_edit = ask_yn("Edit another item? y/n");
 	}  
     }
