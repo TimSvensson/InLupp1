@@ -52,7 +52,7 @@ void main_menu()
 	  break;
 
 	case 5:
-	  puts("här ska varor listas");
+	  print_warehouse(warehouse_list);
 	  break;
 
 	case 6:

@@ -353,6 +353,36 @@ int exit_warehouse()
 
 // PRINT FUNCTIONS -----------------------------------
 
+void print_warehouse(warehouse *warehouse_list)
+{
+  printf("\n\tThe warehouse\n\n");
+
+  shelf *shelf = NULL;
+  int cont = 1;
+  
+  do
+    {
+      shelf = print_20(warehouse_list, shelf);
+
+      if(shelf == NULL)
+	{
+	  break;
+	}
+      else
+	{
+	  cont = ask_yn("Print next page? (y/n)");
+	}
+      
+    }while(cont);
+
+  if(cont)
+    {
+      printf("\n================\n");
+      printf("End of warehouse\n");
+      printf("================\n");
+    }
+}
+
 void print_shelf(shelf *shelf)
 { 
   printf("\n");
@@ -407,11 +437,12 @@ shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
       printf("%d. ", i+1);
       printf("%s", get_name(shelf));
       printf("\n");
-      if (shelf == get_last_shelf(warehouse_list) )
-	{ 
-	  return shelf;
-	}
+      
       shelf = get_next_shelf(shelf);
+      if(shelf == NULL)
+	{
+	  break;
+	}
     }
   return shelf;
 }

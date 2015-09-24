@@ -28,6 +28,9 @@ int ask_int_q(char* question);
 // prints a shelf to the console
 void print_shelf(shelf *shelf);
 
+// prints all shelves in the warehouse
+void print_warehouse(warehouse *warehouse_list);
+
 // prints 20 shelfs and numbers them starting from zero. Returns the last element printed
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
 
