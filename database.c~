@@ -36,7 +36,7 @@ struct warehouse
 {
   shelf *first_shelf;
 
-  // used to save the previous state. Used by undo_action.
+  // used to save the previous state. Used by undo_action
   struct _prev_state
   {
     enum prev_action_e prev_action;
@@ -52,10 +52,39 @@ struct warehouse
 // ===============
 
 
-// TODO!!!
+
+shelf * create_new_shelf(char *name, char *description, int price,
+			 char *shelf_num, int num_items);
+
+int get_shelf_index(warehouse *warehouse_list, shelf *shelf)
+{
+  struct shelf *crnt_shelf = warehouse_list->first_shelf;
+  int index = 0;
+  
+  for(index = 0; crnt_shelf != shelf; ++index)
+    {
+      crnt_shelf = crnt_shelf->next_shelf;
+      if(crnt_shelf == NULL)
+	{
+	  return -1;
+	}
+    }
+
+  return index;
+}
+
 shelf * copy_shelf(shelf *shelf)
 {
-  return NULL;
+  struct shelf * copy =
+    create_new_shelf(shelf->item.name,
+		     shelf->item.description,
+		     shelf->item.price,
+		     shelf->shelf_num,
+		     shelf->num_items);
+
+  copy->next_shelf = shelf->next_shelf;
+
+  return copy;
 }
 
 // Get the last element of warehouse_list
@@ -90,6 +119,10 @@ shelf * get_shelf(warehouse *warehouse_list, int index)
   for(int i = 0; i != index; ++i)
     {
       shelf = shelf -> next_shelf;
+      if(shelf == NULL)
+	{
+	  return NULL;
+	}
     }
 
   return shelf;
@@ -128,6 +161,40 @@ shelf * get_next_shelf(shelf *shelf)
 shelf * get_first(warehouse * warehouse_list)
 {
   return warehouse_list -> first_shelf;
+}
+
+
+
+// ======================
+// ----- SAVE STATE -----
+// ======================
+
+
+
+void save_state(warehouse *warehouse_list, shelf *shelf,
+		int index, prev_action_e action)
+{
+  warehouse_list->prev_state.prev_action = action;
+  warehouse_list->prev_state.old_index = index;
+  
+  switch(action)
+    {
+    case NONE:
+      
+      break;
+
+    case ADD:
+      warehouse_list->prev_state.old_shelf = NULL;
+      break;
+
+    case REMOVE:
+      warehouse_list->prev_state.old_shelf = shelf;
+      break;
+
+    case EDIT:
+      warehouse_list->prev_state.old_shelf = copy_shelf(shelf);
+      break;
+    }
 }
 
 
@@ -235,6 +302,11 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
       end_shelf = get_last_shelf(warehouse_list);
       end_shelf -> next_shelf = shelf;
     }
+
+  save_state(warehouse_list,
+	     shelf,
+	     get_shelf_index(warehouse_list, shelf),
+	     ADD);
 }
 
 
@@ -250,6 +322,11 @@ void remove_shelf(warehouse *warehouse_list, int index)
 {
   shelf *prev_shelf = get_shelf(warehouse_list, index-1);
   shelf *shelf = prev_shelf -> next_shelf;
+
+  save_state(warehouse_list,
+	     shelf,
+	     index,
+	     REMOVE);
   
   prev_shelf -> next_shelf = shelf -> next_shelf;
   free(shelf);
@@ -263,9 +340,13 @@ void remove_shelf(warehouse *warehouse_list, int index)
 
 
 
-void edit_shelf(shelf *shelf, char *name, char *description, int price,
-	       char *shelf_num, int num_items)
+void edit_shelf(warehouse* warehouse_list, shelf *shelf, char *name, char *description, int price, char *shelf_num, int num_items)
 {
+  save_state(warehouse_list,
+	     shelf,
+	     get_shelf_index(warehouse_list, shelf),
+	     EDIT);
+  
   shelf -> item.name = name;
   shelf -> item.description = description;
   shelf -> item.price = price;

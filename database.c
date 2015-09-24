@@ -172,7 +172,7 @@ shelf * get_first(warehouse * warehouse_list)
 
 
 void save_state(warehouse *warehouse_list, shelf *shelf,
-		int index, prev_action_e action)
+		int index, enum prev_action_e action)
 {
   warehouse_list->prev_state.prev_action = action;
   warehouse_list->prev_state.old_index = index;
