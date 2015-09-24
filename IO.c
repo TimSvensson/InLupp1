@@ -8,8 +8,10 @@ void print_price(shelf *shelf);
 void print_shelf_num(shelf *shelf);	   
 void print_num_items (shelf *shelf);
 void print_box_shelf(char *name, char *description, int price, char *shelf_num, int num_items);
+void print_box_shelf_num(char *name, char *description, int price, char *shelf_num, int num_items);
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
 
+void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf);
 
 
 char* strip (char* str)
@@ -52,9 +54,29 @@ int ask_int_q (char *question)
   char* answer;
   fgets(reply, sizeof(reply), stdin);
   answer = strip (reply);
- 
-  for (int i=0; i<strlen(answer); ++i)
-    {   
+  bool cont = true;
+  
+  while(cont)
+    {
+      while (atoi(answer) == 0)
+	{
+	  if (strcmp(answer, "0"))
+	    {
+	      cont = false;
+	    }
+	  else
+	    {
+	      char* message = "Please answer the question with digits and not letters";
+	      printf("%s\n> ", message);
+	      fgets(reply, sizeof(reply), stdin);
+	      answer = strip (reply);
+	    }
+	}
+
+  /*  printf("reply: %s \tanswer: %s", reply, answer);
+
+      for (int i=0; i<strlen(answer); ++i)
+      {   
       ok_ans = isdigit(answer[i]);
       
       if (ok_ans == 0)
@@ -63,10 +85,17 @@ int ask_int_q (char *question)
 	  printf("%s\n> ", message);
 	  fgets(reply, sizeof(reply), stdin);
 	  answer = strip (reply);
+	  printf("loop reply: %s \tloop answer: %s\n", reply, answer);
+	  i=0;
 	  //ok_ans = isdigit(answer[i]);
+	  printf("ok_ans är %d\n", ok_ans);
+	 
 	}
+      printf("still in loop");
 
-    }			   
+   
+      puts("out of loop"); */
+    }
   ok_ans = atoi(answer);
   return ok_ans;
 }
@@ -103,11 +132,10 @@ char ask_3alt(char* question, char alt1, char alt2, char alt3)
  
   while ((ans != alt1) && (ans != alt2) && (ans !=alt3))
     {
-      printf("Please answer '%c' or '%c' or '%c'", alt1, alt2, alt3);
+      printf("Please answer '%c' or '%c' or '%c'\n> ", alt1, alt2, alt3);
       ans = getchar();
       clear();
     }
-  //printf("ans = :%c", ans);
   return ans;
 }
 
@@ -122,13 +150,13 @@ void print_add_shelf(char *name, char *description, int price, char *shelf_num, 
 void add_shelf_IO(warehouse *warehouse_list)
 {
   puts("\n-----ADD AN ITEM--------------------");
-  
+  shelf* shelf;
   char* name;
   char* description;
   int price;
   char* shelf_num; 
   int num_items;
-
+  
   name = ask_str_q("Name");
   description = ask_str_q("Description");
   price = ask_int_q("Price (kr)");
@@ -138,17 +166,21 @@ void add_shelf_IO(warehouse *warehouse_list)
   puts("---------------------------------");
 
   print_add_shelf(name, description, price, shelf_num, num_items);
-
-  if (ask_yn("\nSave this item? y/n") == 1)
+  char ans = ask_3alt("[s]ave this item / [d]on't save / [e]dit", 's', 'd', 'e');
+  if  (ans == 's')
     {
       add_shelf(warehouse_list, name, description, price, shelf_num, num_items);
       printf("\n%s added to the warehouse!\n", name);
     }
-  else
+  else if (ans == 'd')
     {
       puts("Item NOT added");
     }
-  
+  else
+    {
+      add_shelf(warehouse_list, name, description, price, shelf_num, num_items);
+      edit_shelf_IO_aux(warehouse_list, get_last_shelf(warehouse_list));
+    }
 }
 
 void remove_shelf_IO(warehouse *warehouse_list)
@@ -172,7 +204,8 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
   
   {while (cont)
       {
-	print_shelf(choosed_shelf);
+	puts("\n-----EDIT ITEM-------------");
+	print_box_shelf_num(name, description, price, shelf_num, num_items);
 	int edit;
 	edit =  ask_int_q("What would you like to edit?");
   
@@ -199,7 +232,7 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	  default: puts("defaaaauultttt");
 	  }
 	cont = ask_yn("Continue edit this item? y/n ");
-        edit_shelf (choosed_shelf, name, description, price, shelf_num, num_items);
+        edit_shelf(choosed_shelf, name, description, price, shelf_num, num_items);
       }
    
     puts("Item successfully updated");
@@ -219,7 +252,10 @@ void edit_shelf_IO(warehouse* warehouse_list)
       int cont = 1;
       int index;
       int page = 0;
+      printf("\n----- EDIT AN ITEM -----------" );
+      printf("\nItems in warehouse:\n");
       shelf = print_20(warehouse_list, shelf);
+      puts("------------------------------");
       while (cont)
 	{
 	  answer = ask_int_q("\nWhat would you like to do? \n1. Choose an item to edit\n2. See next 20 items\n0. Exit and go back to main menu");
@@ -361,5 +397,16 @@ void print_box_shelf(char *name, char *description, int price, char *shelf_num, 
   printf(" Price\t\t%d\n", price);
   printf(" Shelf number\t%s\n", shelf_num);
   printf(" Number of items\t%d\n", num_items);
+  printf("=====\t\t=====\n\n");
+}
+
+void print_box_shelf_num(char *name, char *description, int price, char *shelf_num, int num_items)
+{
+  printf("=====\t\t=====\n");
+  printf("1. Name\t\t%s\n", name);
+  printf("2. Description\t%s\n", description);
+  printf("3. Price\t\t%d\n", price);
+  printf("4. Shelf number\t%s\n", shelf_num);
+  printf("5. Number of items\t%d\n", num_items);
   printf("=====\t\t=====\n\n");
 }
