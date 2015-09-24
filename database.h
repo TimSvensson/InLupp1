@@ -19,7 +19,7 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
 void remove_shelf(warehouse *warehouse_list, int index);
 
 // Edits a shelf. Updates the exsisting shelf (at address shelf) with the arguments passed to this function.
-void edit_shelf(shelf *shelf, char *name, char *description, int price, char *shelf_num, int num_items);
+void edit_shelf(warehouse *warehouse_list, shelf *shelf, char *name, char *description, int price, char *shelf_num, int num_items);
 
 // gets address to shelf at index in warehouse_list
 shelf * get_shelf(warehouse *warehouse_list, int index);

@@ -31,19 +31,18 @@ enum prev_action_e
     EDIT
   };
 
-// previos state, used in undo
-struct prev_state
-{
-  enum prev_action_e prev_action;
-  shelf *old_shelf;
-  int old_index;
-};
-
 // warehouse
 struct warehouse
 {
   shelf *first_shelf;
-  prev_state *last_action;
+
+  // used to save the previous state. Used by undo_action.
+  struct _prev_state
+  {
+    enum prev_action_e prev_action;
+    shelf *old_shelf;
+    int old_index;
+  } prev_state;
 };
 
 
@@ -56,7 +55,7 @@ struct warehouse
 // TODO!!!
 shelf * copy_shelf(shelf *shelf)
 {
-  
+  return NULL;
 }
 
 // Get the last element of warehouse_list
@@ -139,6 +138,7 @@ shelf * get_first(warehouse * warehouse_list)
 
 
 
+/*
 void init_prev_state(prev_state *prev_state)
 {
   prev_state -> prev_action = NONE;
@@ -155,13 +155,15 @@ prev_state * new_prev_State()
 
   return prev_state;
 }
-
+*/
 
 
 void init_warehouse(warehouse *warehouse_list)
 {
   warehouse_list -> first_shelf = NULL;
-  warehouse_list -> last_action = new_prev_state();
+  warehouse_list -> prev_state.prev_action = NONE;
+  warehouse_list -> prev_state.old_shelf = NULL;
+  warehouse_list -> prev_state.old_index = 0;
 }
 
 warehouse * new_warehouse()
@@ -304,58 +306,57 @@ void destroy_warehouse(warehouse *warehouse_list)
 
 
 
-void undo_last_action(warehouse *warehouse_list)
+void undo_prev_state(warehouse *warehouse_list)
 {
-  prev_state *prev_state = warehouse_list -> last_action;
-  shelf *prev_shelf = NULL; // the shelf before the undo_shelf
-  shelf *undo_shelf = NULL; // the shelf that was added, removed or edited
+  shelf *prev_shelf = NULL; // the shelf before the this_shelf
+  shelf *this_shelf = NULL; // the shelf that was added, removed or edited
   
-  switch(prev_state -> prev_action)
+  switch(warehouse_list -> prev_state.prev_action)
     {
     case ADD:
       // remove that which was added
       prev_shelf =
-	get_shelf(warehouse_list, prev_state -> old_index - 1);
+	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
       // get the correct shelf
-      undo_shelf = prev_shelf -> next_shelf;
-      // set prev_shelf's next_shelf to the shelf after undo_shelf
-      prev_shelf -> next_shelf = undo_shelf -> next_shelf;
+      this_shelf = prev_shelf -> next_shelf;
+      // set prev_shelf's next_shelf to the shelf after this_shelf
+      prev_shelf -> next_shelf = this_shelf -> next_shelf;
       // free up the memory
-      free(undo_shelf);
+      free(this_shelf);
 
-      prev_state -> prev_action = NONE;
+      warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case REMOVE:
       // add that which was removed
       prev_shelf =
-	get_shelf(warehouse_list, prev_state -> old_index - 1);
+	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
       // get the old shelf address
-      undo_shelf = prev_state -> old_shelf;
-      // set the correct next_shelf address in undo_shelf
-      undo_shelf -> next_shelf = prev_shelf -> next_shelf;
+      this_shelf = warehouse_list -> prev_state.old_shelf;
+      // set the correct next_shelf address in this_shelf
+      this_shelf -> next_shelf = prev_shelf -> next_shelf;
       // set the correct address in prev_shelf
-      prev_shelf -> next_shelf = undo_shelf;
+      prev_shelf -> next_shelf = this_shelf;
 
-      prev_state -> prev_action = NONE;
+      warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case EDIT:
       // return an item to it's former glory
       prev_shelf =
-	get_shelf(warehouse_list, prev_state -> old_index - 1);
+	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
       
-      undo_shelf = prev_state -> old_shelf;
-      undo_shelf -> next_shelf = prev_shelf -> next_shelf;
+      this_shelf = warehouse_list -> prev_state.old_shelf;
+      this_shelf -> next_shelf = prev_shelf -> next_shelf;
 
       // destroy "new" version
       free(prev_shelf -> next_shelf);
-      prev_shelf -> next_shelf = prev_state -> old_shelf;
+      prev_shelf -> next_shelf = warehouse_list -> prev_state.old_shelf;
 
-      prev_state -> prev_action = NONE;
+      warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case NONE:
