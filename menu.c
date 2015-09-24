@@ -5,11 +5,11 @@ void print_main_menu()
 {
   puts("\n----- MAIN MENU ----------------------");
   puts("--------------------------------------\n");
-  puts("1. Add a item");
-  puts("2. Remove a item");
-  puts("3. Edit a item");
+  puts("1. Add an item");
+  puts("2. Remove an item");
+  puts("3. Edit an item");
   puts("4. Undo the last action");
-  puts("5. List all wares in the database");
+  puts("5. List all items in the database");
   puts("0. Exit program");
 
 }
@@ -27,7 +27,7 @@ void main_menu()
 
       int answer;
       answer = ask_int_q("\nWhat would you like to do?");
-
+    
       while (answer > 5 || answer < 0)
 	{
 	  answer = ask_int_q("That's not an option. Please try again with a number between 0-5.");  
