@@ -219,8 +219,7 @@ void save_notsave_edit (warehouse* warehouse_list, char *name, char *description
 void remove_shelf_IO(warehouse *warehouse_list)
 {
   shelf* shelf = print_20(warehouse_list, NULL);
-  int ans = 0;
-  char ans2;
+  char ans;
   int index;
   int page = 0;
   int list_all = 1;
@@ -232,12 +231,12 @@ void remove_shelf_IO(warehouse *warehouse_list)
 	{
 	  puts("There is no next 20 items");
 	}
-      else if (ans2 == 'n')
+      else if (ans == 'n')
 	{
 	  page = page +1;
 	  shelf = print_20(warehouse_list, shelf);
 	}
-      else if (ans2 == 'r' )
+      else if (ans == 'r')
 	{
 	  index = get_index(warehouse_list);
 	  remove_shelf(warehouse_list, index);
