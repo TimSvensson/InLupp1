@@ -10,7 +10,7 @@ void print_num_items (shelf *shelf);
 void print_box_shelf(char *name, char *description, int price, char *shelf_num, int num_items);
 void print_box_shelf_num(char *name, char *description, int price, char *shelf_num, int num_items);
 shelf * print_20(warehouse *warehouse_list, shelf *shelf_start);
-
+void save_notsave_edit (warehouse* warehouse_list, char *name, char *description, int price, char *shelf_num, int num_items);
 void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf);
 
 
@@ -114,6 +114,31 @@ char ask_3alt(char* question, char alt1, char alt2, char alt3)
   return ans;
 }
 
+bool check_shelf_ans(char* answer)
+{
+  if (isalpha(answer[0]))
+    {
+      for (int i=1; i<strlen(answer); ++i)
+	{
+	  if (!(isdigit(answer[i])))
+	    {
+	      return false;
+	    }
+	}
+       return true;
+    }
+  return false;
+}
+
+char* fix_shelf_num(char* shelf_num)
+{
+  while (!(check_shelf_ans(shelf_num)))
+    {
+      shelf_num = ask_str_q("Please answer on the format [A23], [A2], [B34]");
+    }
+  shelf_num[0] = toupper(shelf_num[0]);
+return shelf_num;
+}
 
 void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
 {
@@ -135,12 +160,18 @@ void add_shelf_IO(warehouse *warehouse_list)
   name = ask_str_q("Name");
   description = ask_str_q("Description");
   price = ask_int_q("Price (kr)");
-  shelf_num = ask_str_q("Shelf number ");
+  shelf_num = ask_str_q("Shelf number");
+  shelf_num = fix_shelf_num(shelf_num);
   num_items = ask_int_q("Number of items ");
 
   puts("---------------------------------");
 
   print_add_shelf(name, description, price, shelf_num, num_items);
+  save_notsave_edit (warehouse_list, name, description, price, shelf_num, num_items);
+}
+
+void save_notsave_edit (warehouse* warehouse_list, char *name, char *description, int price, char *shelf_num, int num_items)
+{
   char ans = ask_3alt("[s]ave this item / [d]on't save / [e]dit", 's', 'd', 'e');
   if  (ans == 's')
     {
@@ -157,7 +188,6 @@ void add_shelf_IO(warehouse *warehouse_list)
       edit_shelf_IO_aux(warehouse_list, get_last_shelf(warehouse_list));
     }
 }
-
 void remove_shelf_IO(warehouse *warehouse_list)
 {
   // find shelf to be removed
@@ -177,41 +207,51 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
   int num_items = get_num_items(choosed_shelf);
  
   
-  {while (cont)
-      {
-	puts("\n-----EDIT ITEM-------------");
-	print_box_shelf_num(name, description, price, shelf_num, num_items);
-	int edit;
-	edit =  ask_int_q("What would you like to edit?");
+  while (cont)
+    {
+      edit_shelf(choosed_shelf, name, description, price, shelf_num, num_items); //flyttade hit
+      puts("\n-----EDIT ITEM-------------");
+      print_box_shelf_num(name, description, price, shelf_num, num_items);
+      int edit;
+      edit =  ask_int_q("What would you like to edit?");
   
-	while (edit < 1 || edit > 5)
-	  {edit = ask_int_q("That's not an option. Please try again with a number between 1-5");
-	  }
-	switch (edit)
-	  {
-	  case 1: {
-	    print_name(choosed_shelf);
-	    name = ask_str_q("\nNew name: ");} break;
-	  case 2: {
-	    print_description(choosed_shelf);
-	    description = ask_str_q("\nNew description: ");} break;
-	  case 3: {
-	    print_price(choosed_shelf);
-	    price = ask_int_q("\nNew price");} break;
-	  case 4: {
-	    print_shelf_num(choosed_shelf);
-	    shelf_num = ask_str_q("\nNew shelf number: ");} break;
-	  case 5: {
-	    print_num_items(choosed_shelf);
-	    num_items = ask_int_q("\nNew num_items: ");} break;
-	  default: puts("defaaaauultttt");
-	  }
-	cont = ask_yn("Continue edit this item? y/n ");
-        edit_shelf(choosed_shelf, name, description, price, shelf_num, num_items);
+      while (edit < 1 || edit > 5)
+	{edit = ask_int_q("That's not an option. Please try again with a number between 1-5");
+	}
+      switch (edit)
+	{
+	case 1: {
+	  print_name(choosed_shelf);
+	  name = ask_str_q("\nNew name: ");} break;
+	case 2: {
+	  print_description(choosed_shelf);
+	  description = ask_str_q("\nNew description: ");} break;
+	case 3: {
+	  print_price(choosed_shelf);
+	  price = ask_int_q("\nNew price");} break;
+	case 4: {
+	  print_shelf_num(choosed_shelf);
+	  shelf_num = ask_str_q("\nNew shelf number: ");
+	  shelf_num = fix_shelf_num(shelf_num);} break;
+	case 5: {
+	  print_num_items(choosed_shelf);
+	  num_items = ask_int_q("\nNew num_items: ");} break;
+	default: puts("defaaaauultttt");
+	}
+      cont = ask_yn("Continue edit this item? y/n ");
+      //flyttad till toppen
+        
+    }
+  int ans = ask_yn("Save this ware? y/n");
+  if (ans == 1)
+    {
+      edit_shelf(choosed_shelf, name, description, price, shelf_num, num_items);
+      puts("Item successfully updated");
+    }
+    else
+      {
+	puts ("Last edit NOT saved");
       }
-   
-    puts("Item successfully updated");
-  }
 }
 
 
@@ -366,22 +406,22 @@ shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
 
 void print_box_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
 {
-  printf("=====\t\t=====\n");
-  printf(" Name\t\t%s\n", name);
-  printf(" Description\t%s\n", description);
-  printf(" Price\t\t%d\n", price);
-  printf(" Shelf number\t%s\n", shelf_num);
+  printf("=====\t\t\t=====\n");
+  printf(" Name\t\t\t%s\n", name);
+  printf(" Description\t\t%s\n", description);
+  printf(" Price\t\t\t%d\n", price);
+  printf(" Shelf number\t\t%s\n", shelf_num);
   printf(" Number of items\t%d\n", num_items);
-  printf("=====\t\t=====\n\n");
+  printf("=====\t\t\t=====\n\n");
 }
 
 void print_box_shelf_num(char *name, char *description, int price, char *shelf_num, int num_items)
 {
-  printf("=====\t\t=====\n");
-  printf("1. Name\t\t%s\n", name);
-  printf("2. Description\t%s\n", description);
-  printf("3. Price\t\t%d\n", price);
-  printf("4. Shelf number\t%s\n", shelf_num);
+  printf("=====\t\t\t=====\n");
+  printf("1. Name\\t\t%s\n", name);
+  printf("2. Description\t\t%s\n", description);
+  printf("3. Price\t\t\t%d\n", price);
+  printf("4. Shelf number\t\t%s\n", shelf_num);
   printf("5. Number of items\t%d\n", num_items);
-  printf("=====\t\t=====\n\n");
+  printf("=====\t\t\t=====\n\n");
 }
