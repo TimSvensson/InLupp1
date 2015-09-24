@@ -70,7 +70,7 @@ char* ask_str_q (char *question)
   fgets(reply, sizeof(reply), stdin);
   char* answer = reply;
   answer = strip (reply);
-  return answer; // anropa free någon gång i framtiden...
+  return answer; // anropa free nÃ¥gon gÃ¥ng i framtiden...
 }
 
 
@@ -219,7 +219,8 @@ void save_notsave_edit (warehouse* warehouse_list, char *name, char *description
 void remove_shelf_IO(warehouse *warehouse_list)
 {
   shelf* shelf = print_20(warehouse_list, NULL);
-  char ans;
+  int ans = 0;
+  char ans2;
   int index;
   int page = 0;
   int list_all = 1;
@@ -231,12 +232,12 @@ void remove_shelf_IO(warehouse *warehouse_list)
 	{
 	  puts("There is no next 20 items");
 	}
-      else if (ans == 'n')
+      else if (ans2 == 'n')
 	{
 	  page = page +1;
 	  shelf = print_20(warehouse_list, shelf);
 	}
-      else if (ans == 'r')
+      else if (ans2 == 'r' )
 	{
 	  index = get_index(warehouse_list);
 	  remove_shelf(warehouse_list, index);
@@ -351,7 +352,7 @@ void edit_shelf_IO(warehouse* warehouse_list)
 		  shelf = get_shelf (warehouse_list, index);
 		  while (shelf == NULL)
 		    {
-		      answer = ask_int_q("Item no.%d doesn't exist, please choose another item to edit. ");
+		      answer = ask_int_q("Item doesn't exist, please choose another item to edit. ");
 		       index = page * 20 + answer - 1;
 		       shelf = get_shelf (warehouse_list, index);
 		    }
@@ -446,6 +447,31 @@ void print_shelf(shelf *shelf)
   printf("3. Price\t\t%d kr\n", get_price(shelf));
   printf("4. Shelf number\t%s\n", get_shelf_num(shelf));
   printf("5. Number of items\t%d\n", get_num_items(shelf));
+}
+
+void print_name(shelf *shelf)
+{
+  printf("Name:\t\t%s", get_name(shelf));
+}
+
+void print_description(shelf *shelf)
+{
+  printf("Description:\t%s", get_description(shelf));
+}
+	    
+void print_price(shelf *shelf)
+{
+  printf("Price:\t\t%d kr", get_price(shelf));
+}
+	  
+void print_shelf_num(shelf *shelf)
+{
+  printf("Shelf number:\t%s", get_shelf_num(shelf));
+}
+	   
+void print_num_items(shelf *shelf)
+{
+  printf("Number of items:\t%d", get_num_items(shelf));
 }
 
 shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)

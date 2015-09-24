@@ -11,8 +11,23 @@ void test ()
   add_shelf(warehouse_list, "gurka", "grön", 15, "g2", 17);
   add_shelf(warehouse_list, "tomat", "röd och möglig", 7, "t2", 13);
 
-  print_20(warehouse_list, NULL);
+  print_warehouse(warehouse_list);
 
+  remove_shelf(warehouse_list, 2);
+
+  edit_shelf(warehouse_list,
+	     get_shelf(warehouse_list, 1),
+	     "Timtim",
+	     "Cool kille som inte s�r skriver.",
+	     1000000,
+	     "B27",
+	     1337);
+
+  print_shelf(get_shelf(warehouse_list, 1);
+  
+  print_warehouse(warehouse_list);
+
+  
 }
 
 int main(void)
