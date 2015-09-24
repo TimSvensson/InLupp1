@@ -412,6 +412,12 @@ void print_warehouse(warehouse *warehouse_list)
 {
   printf("\n\tThe warehouse\n\n");
 
+  if (warehouse_empty(warehouse_list))
+    {
+      puts("Warehouse is empty");
+      return;
+    }
+
   shelf *shelf = NULL;
   int cont = 1;
   
