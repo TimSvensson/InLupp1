@@ -23,7 +23,7 @@ void test ()
 	     "B27",
 	     1337);
 
-  print_shelf(get_shelf(warehouse_list, 1);
+  print_shelf(get_shelf(warehouse_list, 1));
   
   print_warehouse(warehouse_list);
 
