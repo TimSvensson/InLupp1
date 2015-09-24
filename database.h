@@ -42,4 +42,6 @@ shelf * get_next_shelf(shelf *shelf);
 
 shelf * get_first(warehouse * warehouse_list);
 
+int warehouse_empty(warehouse *warehouse_list);
+
 #endif /* DATABASE_H */

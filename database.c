@@ -53,6 +53,16 @@ struct warehouse
 
 
 
+int warehouse_empty(warehouse *warehouse_list)
+{
+  if(warehouse_list->first_shelf == NULL)
+    {
+      return 1;
+    }
+
+  return 0;
+}
+
 shelf * create_new_shelf(char *name, char *description, int price,
 			 char *shelf_num, int num_items);
 
