@@ -18,7 +18,7 @@ void test ()
   edit_shelf(warehouse_list,
 	     get_shelf(warehouse_list, 1),
 	     "Timtim",
-	     "Cool kille som inte sär skriver.",
+	     "Cool kille som inte sar skriver.",
 	     1000000,
 	     "B27",
 	     1337);

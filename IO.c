@@ -448,6 +448,31 @@ void print_shelf(shelf *shelf)
   printf("5. Number of items\t%d\n", get_num_items(shelf));
 }
 
+void print_name(shelf *shelf)
+{
+  printf("Name:\t\t%s", get_name(shelf));
+}
+
+void print_description(shelf *shelf)
+{
+  printf("Description:\t%s", get_description(shelf));
+}
+	    
+void print_price(shelf *shelf)
+{
+  printf("Price:\t\t%d kr", get_price(shelf));
+}
+	  
+void print_shelf_num(shelf *shelf)
+{
+  printf("Shelf number:\t%s", get_shelf_num(shelf));
+}
+	   
+void print_num_items(shelf *shelf)
+{
+  printf("Number of items:\t%d", get_num_items(shelf));
+}
+
 shelf * print_20(struct warehouse *warehouse_list, struct shelf *shelf_start)
 {
   shelf* shelf = NULL;
