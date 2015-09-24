@@ -54,47 +54,22 @@ int ask_int_q (char *question)
   char* answer;
   fgets(reply, sizeof(reply), stdin);
   answer = strip (reply);
-  bool cont = true;
-  
-  while(cont)
+
+  if (strcmp(answer, "0")==0)
     {
-      while (atoi(answer) == 0)
-	{
-	  if (strcmp(answer, "0"))
-	    {
-	      cont = false;
-	    }
-	  else
-	    {
-	      char* message = "Please answer the question with digits and not letters";
-	      printf("%s\n> ", message);
-	      fgets(reply, sizeof(reply), stdin);
-	      answer = strip (reply);
-	    }
-	}
-
-  /*  printf("reply: %s \tanswer: %s", reply, answer);
-
-      for (int i=0; i<strlen(answer); ++i)
-      {   
-      ok_ans = isdigit(answer[i]);
-      
-      if (ok_ans == 0)
-	{
-	  char* message = "Please answer the question with digits and not letters";
+      return 0;
+    }
+  
+  for (int i=0; i<strlen(answer); i++)
+    { ok_ans = isdigit(answer[i]);
+      while (ok_ans == 0)
+	{	char* message = "Please answer the question with digits and not letters";
 	  printf("%s\n> ", message);
 	  fgets(reply, sizeof(reply), stdin);
 	  answer = strip (reply);
-	  printf("loop reply: %s \tloop answer: %s\n", reply, answer);
 	  i=0;
-	  //ok_ans = isdigit(answer[i]);
-	  printf("ok_ans är %d\n", ok_ans);
-	 
+	  ok_ans = isdigit(answer[i]);
 	}
-      printf("still in loop");
-
-   
-      puts("out of loop"); */
     }
   ok_ans = atoi(answer);
   return ok_ans;
