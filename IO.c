@@ -35,6 +35,33 @@ void clear (void)
   } while (newline_found);
 }
 
+int get_index()
+{
+  int answer;
+  int correct_index;
+  int index;
+  
+  answer = ask_int_q ("Choose an item. Answer with a number between 1-20. Press 0 to exit.");
+
+  while (correct_index)
+    {
+      while (answer < 1 || 20 < answer)
+	{
+	  answer = ask_int_q("That's not an option. Please try again with a number between 1-20");
+	}
+      index = page * 20 + answer - 1;
+      shelf = get_shelf (warehouse_list, index);
+      while (shelf == NULL)
+	{
+	  answer = ask_int_q("Item no.%d doesn't exist, please choose another item");
+	  index = page * 20 + answer - 1;
+	  shelf = get_shelf (warehouse_list, index);
+	}
+      correct_index = false;
+    }
+  return index;
+}
+
 char* ask_str_q (char *question)
 {
   printf("%s\n> ", question);
@@ -190,6 +217,35 @@ void save_notsave_edit (warehouse* warehouse_list, char *name, char *description
 }
 void remove_shelf_IO(warehouse *warehouse_list)
 {
+  shelf* shelf = print_20(warehouse_list, NULL);
+  int ans = 0;
+  int index;
+  int list_all = 1;
+  
+  while (list_all)
+    {
+      if (shelf == NULL)
+	{
+	  ans = ask_2alt("This is all the items in the warehouse. [r]emove an item or [e]xit?", 'r', 'e');
+
+	  if (ans == 'e')
+	    {
+	      return;
+	    }
+	  else
+	    {
+	      get_index();
+	    }
+	}
+ 
+      char ans = ask_2alt("[n]ext 20 items / [e]xit", 'n', 'e');
+      if (ans == 'n')
+	{
+	  shelf = print_20(warehouse_list, shelf);
+	}
+
+    }
+
   // find shelf to be removed
   // remove item
 }
