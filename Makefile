@@ -1,23 +1,23 @@
 CC=gcc
+FLAGS= -Wall -std=c11 -ggdb
 
-all: main
+all: warehouse
 
-warehouse: main.c b.o
-	$(CC) -Wall -std=c11 -ggdb main.c menu.o IO.o database.o -o main
+warehouse: main.c menu.o IO.o database.o
+	$(CC) $(FLAGS) main.c menu.o IO.o database.o -o main
 
-menu.o: menu.c
-	$(CC) -Wall -std=c11 -ggdb menu.c -c
+menu.o: menu.c menu.h IO.o database.o
+	$(CC) $(FLAGS) menu.c -c
 
-IO.o: IO.c
-	$(CC) -Wall -std=c11 -ggdb IO.c -c
+IO.o: IO.c IO.h database.o
+	$(CC) $(FLAGS) IO.c -c
 
-database.o: database.c
-	$(CC) -Wall -std=c11 -ggdb database.c -c
+database.o: database.c database.h
+	$(CC) $(FLAGS) database.c -c
 
-run: main #run är beroende av warehouse
-	@echo "Running program, woho!"
-
-	@./main #om man inte vill att terminalen skriver ut ./warehouse kan man lägga till @ innan
+run: warehouse #run är beroende av warehouse
+	echo "Running program, woho!"
+	./main
 
 clean:
 	rm -f main #-f betyder att om filen inte existerar händer ingenting

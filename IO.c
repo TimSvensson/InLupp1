@@ -38,7 +38,7 @@ void clear (void)
 int get_index(warehouse* warehouse_list)
 {
   int answer;
-  int correct_index;
+  bool correct_index = true;
   int index;
   int page = 0;
   shelf* shelf;
@@ -54,7 +54,7 @@ int get_index(warehouse* warehouse_list)
       shelf = get_shelf(warehouse_list, index);
       while (shelf == NULL)
 	{
-	  answer = ask_int_q("Item no.%d doesn't exist, please choose another item");
+	  answer = ask_int_q("Item doesn't exist, please choose another item");
 	  index = page * 20 + answer - 1;
 	  shelf = get_shelf (warehouse_list, index);
 	}
@@ -70,7 +70,7 @@ char* ask_str_q (char *question)
   fgets(reply, sizeof(reply), stdin);
   char* answer = reply;
   answer = strip (reply);
-  return answer; // anropa free någon gång i framtiden...
+  return answer; // anropa free nÃ¥gon gÃ¥ng i framtiden...
 }
 
 
@@ -178,7 +178,6 @@ void print_add_shelf(char *name, char *description, int price, char *shelf_num, 
 void add_shelf_IO(warehouse *warehouse_list)
 {
   puts("\n-----ADD AN ITEM--------------------");
-  shelf* shelf;
   char* name;
   char* description;
   int price;
@@ -219,7 +218,7 @@ void save_notsave_edit (warehouse* warehouse_list, char *name, char *description
 void remove_shelf_IO(warehouse *warehouse_list)
 {
   shelf* shelf = print_20(warehouse_list, NULL);
-  char ans;
+  char ans = 0;
   int index;
   int page = 0;
   int list_all = 1;
@@ -236,7 +235,7 @@ void remove_shelf_IO(warehouse *warehouse_list)
 	  page = page +1;
 	  shelf = print_20(warehouse_list, shelf);
 	}
-      else if (ans == 'r')
+      else if (ans == 'r' )
 	{
 	  index = get_index(warehouse_list);
 	  remove_shelf(warehouse_list, index);
@@ -351,7 +350,7 @@ void edit_shelf_IO(warehouse* warehouse_list)
 		  shelf = get_shelf (warehouse_list, index);
 		  while (shelf == NULL)
 		    {
-		      answer = ask_int_q("Item no.%d doesn't exist, please choose another item to edit. ");
+		      answer = ask_int_q("Item doesn't exist, please choose another item to edit. ");
 		       index = page * 20 + answer - 1;
 		       shelf = get_shelf (warehouse_list, index);
 		    }
@@ -411,12 +410,6 @@ int exit_warehouse()
 void print_warehouse(warehouse *warehouse_list)
 {
   printf("\n\tThe warehouse\n\n");
-
-  if (warehouse_empty(warehouse_list))
-    {
-      puts("Warehouse is empty");
-      return;
-    }
 
   shelf *shelf = NULL;
   int cont = 1;
