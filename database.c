@@ -86,10 +86,10 @@ int get_shelf_index(warehouse *warehouse_list, shelf *shelf)
 shelf * copy_shelf(shelf *shelf)
 {
   struct shelf * copy =
-    create_new_shelf(shelf->item.name,
-		     shelf->item.description,
+    create_new_shelf(strdup(shelf->item.name),
+		     strdup(shelf->item.description),
 		     shelf->item.price,
-		     shelf->shelf_num,
+		     strdup(shelf->shelf_num),
 		     shelf->num_items);
 
   copy->next_shelf = shelf->next_shelf;
@@ -198,7 +198,7 @@ void save_state(warehouse *warehouse_list, shelf *shelf,
       break;
 
     case REMOVE:
-      warehouse_list->prev_state.old_shelf = shelf;
+      warehouse_list->prev_state.old_shelf = copy_shelf(shelf);
       break;
 
     case EDIT:
@@ -298,7 +298,6 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
 {
   // create new shelf
   shelf *shelf = create_new_shelf(name, description, price, shelf_num, num_items);
-  struct shelf *end_shelf = NULL;
   
   // check: is warehouse empty?
   if(warehouse_list -> first_shelf == NULL)
@@ -309,14 +308,12 @@ void add_shelf(warehouse *warehouse_list, char *name, char *description, int pri
   else
     {
       // no: append to last element
-      end_shelf = get_last_shelf(warehouse_list);
+      struct shelf *end_shelf = get_last_shelf(warehouse_list);
       end_shelf -> next_shelf = shelf;
     }
 
-  save_state(warehouse_list,
-	     shelf,
-	     get_shelf_index(warehouse_list, shelf),
-	     ADD);
+  // Save this action
+  save_state(warehouse_list, shelf, get_shelf_index(warehouse_list, shelf), ADD);
 }
 
 
@@ -333,10 +330,9 @@ void remove_shelf(warehouse *warehouse_list, int index)
   shelf *prev_shelf = get_shelf(warehouse_list, index-1);
   shelf *shelf = prev_shelf -> next_shelf;
 
-  save_state(warehouse_list,
-	     shelf,
-	     index,
-	     REMOVE);
+  assert(shelf != NULL);
+
+  save_state(warehouse_list, shelf, index, REMOVE);
   
   prev_shelf -> next_shelf = shelf -> next_shelf;
   free(shelf);
@@ -352,10 +348,7 @@ void remove_shelf(warehouse *warehouse_list, int index)
 
 void edit_shelf(warehouse* warehouse_list, shelf *shelf, char *name, char *description, int price, char *shelf_num, int num_items)
 {
-  save_state(warehouse_list,
-	     shelf,
-	     get_shelf_index(warehouse_list, shelf),
-	     EDIT);
+  save_state(warehouse_list, shelf, get_shelf_index(warehouse_list, shelf), EDIT);
   
   shelf -> item.name = name;
   shelf -> item.description = description;
@@ -397,61 +390,87 @@ void destroy_warehouse(warehouse *warehouse_list)
 
 
 
-void undo_prev_state(warehouse *warehouse_list)
+void undo_action(warehouse *warehouse_list)
 {
-  shelf *prev_shelf = NULL; // the shelf before the this_shelf
-  shelf *this_shelf = NULL; // the shelf that was added, removed or edited
+
+  // the shelf that was added, removed or edited
+  shelf *undo_shelf = get_shelf(warehouse_list, warehouse_list->prev_state.old_index);
+  // the previous state of undo_shelf
+  shelf *old_shelf  = warehouse_list->prev_state.old_shelf;
+  // the shelf before the shelf that needs "undo-ing"
+  shelf *prev_shelf = NULL;
+
+
+  
+  // if undo_shelf is the first shelf in the warehouse
+  if(warehouse_list->prev_state.old_index != 0)
+    {
+      prev_shelf = get_shelf(warehouse_list, warehouse_list->prev_state.old_index - 1);
+    }
+
+
   
   switch(warehouse_list -> prev_state.prev_action)
     {
     case ADD:
       // remove that which was added
-      prev_shelf =
-	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
-      // get the correct shelf
-      this_shelf = prev_shelf -> next_shelf;
-      // set prev_shelf's next_shelf to the shelf after this_shelf
-      prev_shelf -> next_shelf = this_shelf -> next_shelf;
+      // set prev_shelf's next_shelf to the shelf after undo_shelf
+      if(prev_shelf == NULL)
+	{
+	  warehouse_list->first_shelf = undo_shelf->next_shelf;
+	}
+      else
+	{
+	  prev_shelf->next_shelf = undo_shelf->next_shelf;
+	}
+      
       // free up the memory
-      free(this_shelf);
+      free(undo_shelf);
 
       warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case REMOVE:
       // add that which was removed
-      prev_shelf =
-	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
-      // get the old shelf address
-      this_shelf = warehouse_list -> prev_state.old_shelf;
-      // set the correct next_shelf address in this_shelf
-      this_shelf -> next_shelf = prev_shelf -> next_shelf;
-      // set the correct address in prev_shelf
-      prev_shelf -> next_shelf = this_shelf;
-
+      // if we removed the first shelf of the warehouse
+      if(prev_shelf == NULL)
+	{
+	  old_shelf->next_shelf = warehouse_list->first_shelf;
+	  warehouse_list->first_shelf = old_shelf;
+	}
+      else
+	{
+	  old_shelf->next_shelf = prev_shelf->next_shelf;
+	  prev_shelf->next_shelf = old_shelf;
+	}
+      
       warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case EDIT:
       // return an item to it's former glory
-      prev_shelf =
-	get_shelf(warehouse_list, warehouse_list -> prev_state.old_index - 1);
 
+      if(prev_shelf == NULL)
+	{
+	  warehouse_list->first_shelf = old_shelf;
+	}
+      else
+	{
+	  prev_shelf->next_shelf = old_shelf;
+	}
       
-      this_shelf = warehouse_list -> prev_state.old_shelf;
-      this_shelf -> next_shelf = prev_shelf -> next_shelf;
+      old_shelf->next_shelf = undo_shelf->next_shelf;
 
-      // destroy "new" version
-      free(prev_shelf -> next_shelf);
-      prev_shelf -> next_shelf = warehouse_list -> prev_state.old_shelf;
-
+      free(undo_shelf);
+	
       warehouse_list -> prev_state.prev_action = NONE;
       break;
 
     case NONE:
       // tell user there's nothing to undo
+      printf("There's nothing to undo!\n");
       break;
       
     default:

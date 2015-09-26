@@ -217,6 +217,12 @@ void save_notsave_edit (warehouse* warehouse_list, char *name, char *description
 }
 void remove_shelf_IO(warehouse *warehouse_list)
 {
+  if(warehouse_empty(warehouse_list))
+    {
+      printf("The warehouse is empty!\n");
+      return ;
+    }
+  
   shelf* shelf = print_20(warehouse_list, NULL);
   char ans = 0;
   int index;
@@ -314,6 +320,13 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 void edit_shelf_IO(warehouse* warehouse_list)
 {
   int continue_edit = 1;
+
+  if(warehouse_empty(warehouse_list))
+    {
+      printf("The warehouse is empty!\n");
+      return ;
+    }
+  
   while (continue_edit)
     {
       shelf *shelf = NULL;
@@ -413,37 +426,44 @@ void print_warehouse(warehouse *warehouse_list)
 
   shelf *shelf = NULL;
   int cont = 1;
-  
-  do
-    {
-      shelf = print_20(warehouse_list, shelf);
 
-      if(shelf == NULL)
+  if(warehouse_empty(warehouse_list))
+    {
+      printf("Warehouse is empty!\n");
+    }
+  else
+    {
+      do
 	{
-	  break;
-	}
-      else
-	{
-	  cont = ask_yn("Print next page? (y/n)");
-	}
+	  shelf = print_20(warehouse_list, shelf);
+
+	  if(shelf == NULL)
+	    {
+	      break;
+	    }
+	  else
+	    {
+	      cont = ask_yn("Print next page? (y/n)");
+	    }
       
-    }while(cont);
+	}while(cont);
 
-  if(cont)
-    {
-      printf("\n================\n");
-      printf("End of warehouse\n");
-      printf("================\n");
+      if(cont)
+	{
+	  printf("\n================\n");
+	  printf("End of warehouse\n");
+	  printf("================\n");
+	}
     }
 }
 
 void print_shelf(shelf *shelf)
 { 
   printf("\n");
-  printf("1. Name\t\t%s\n", get_name(shelf));
-  printf("2. Description\t%s\n", get_description(shelf));
+  printf("1. Name\t\t\t%s\n", get_name(shelf));
+  printf("2. Description\t\t%s\n", get_description(shelf));
   printf("3. Price\t\t%d kr\n", get_price(shelf));
-  printf("4. Shelf number\t%s\n", get_shelf_num(shelf));
+  printf("4. Shelf number\t\t%s\n", get_shelf_num(shelf));
   printf("5. Number of items\t%d\n", get_num_items(shelf));
 }
 

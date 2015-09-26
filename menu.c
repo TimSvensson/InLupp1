@@ -48,7 +48,7 @@ void main_menu()
 	  break;
 
 	case 4:
-	  puts("undo_action anropas");
+	  undo_action(warehouse_list);
 	  break;
 
 	case 5:
