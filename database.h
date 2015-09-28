@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #ifndef DATABASE_H 
 #define DATABASE_H
@@ -30,6 +31,9 @@ void undo_action(warehouse *warehouse_list);
 
 // free up memory used by program
 void destroy_warehouse(warehouse *warehouse_list);
+
+// return True if shelf is occupied by another item
+bool shelf_occupied(warehouse *warehouse_list, char *shelf_num);
 
 shelf * get_last_shelf(warehouse *warehouse_list); //Karro testar
 

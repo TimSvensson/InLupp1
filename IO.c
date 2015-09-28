@@ -65,9 +65,12 @@ int get_index(warehouse* warehouse_list)
 
 char* ask_str_q (char *question)
 {
-  printf("%s\n> ", question);
-  char reply[256];
-  fgets(reply, sizeof(reply), stdin);
+  char reply[256] = "\n";
+  while (reply[0] == '\n')
+    {
+      printf("%s\n> ", question);
+      fgets(reply, sizeof(reply), stdin);
+    }
   char* answer = reply;
   answer = strip (reply);
   return answer; // anropa free nÃ¥gon gÃ¥ng i framtiden...
@@ -76,13 +79,16 @@ char* ask_str_q (char *question)
 
 int ask_int_q (char *question)
 {
-  printf("%s\n> ", question);
-  char reply[128];
-  int ok_ans;
-  char* answer;
-  fgets(reply, sizeof(reply), stdin);
-  answer = strip (reply);
+  char reply[128] ="\n";
 
+  while (reply[0] == '\n')
+    {
+      printf("%s\n> ", question);
+      fgets(reply, sizeof(reply), stdin);
+    }
+  char* answer;
+  answer = strip (reply);
+  int ok_ans;
   if (strcmp(answer, "0")==0)
     {
       return 0;
@@ -91,7 +97,8 @@ int ask_int_q (char *question)
   for (int i=0; i<strlen(answer); i++)
     { ok_ans = isdigit(answer[i]);
       while (ok_ans == 0)
-	{	char* message = "Please answer the question with digits and not letters";
+	{
+	  char* message = "Please answer the question with digits and not letters";
 	  printf("%s\n> ", message);
 	  fgets(reply, sizeof(reply), stdin);
 	  answer = strip (reply);
@@ -146,6 +153,11 @@ bool check_shelf_ans(char* answer)
 {
   if (isalpha(answer[0]))
     {
+      if (strlen(answer) == 1)
+	{
+	  return false;
+	}
+  
       for (int i=1; i<strlen(answer); ++i)
 	{
 	  if (!(isdigit(answer[i])))
@@ -153,7 +165,7 @@ bool check_shelf_ans(char* answer)
 	      return false;
 	    }
 	}
-       return true;
+      return true;
     }
   return false;
 }
@@ -171,7 +183,7 @@ return shelf_num;
 void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
 {
   printf("\n\n");
-  printf("    Your new item\n");
+  printf("\tYour new item\n");
   print_box_shelf(name, description, price, shelf_num, num_items);
 }
 
@@ -535,7 +547,7 @@ void print_box_shelf(char *name, char *description, int price, char *shelf_num, 
 void print_box_shelf_num(char *name, char *description, int price, char *shelf_num, int num_items)
 {
   printf("=====\t\t\t=====\n");
-  printf("1. Name\\t\t%s\n", name);
+  printf("1. Name\t\t%s\n", name);
   printf("2. Description\t\t%s\n", description);
   printf("3. Price\t\t\t%d\n", price);
   printf("4. Shelf number\t\t%s\n", shelf_num);
