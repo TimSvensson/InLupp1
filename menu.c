@@ -48,7 +48,7 @@ void main_menu()
 	  break;
 
 	case 4:
-	  undo_action(warehouse_list);
+	  undo_action_IO(warehouse_list);
 	  break;
 
 	case 5:

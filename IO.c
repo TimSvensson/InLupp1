@@ -1,6 +1,7 @@
 #include "database.h"
 #include "IO.h"
 
+void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items);
 void print_shelf(shelf *shelf);
 void print_name(shelf *shelf);
 void print_description(shelf *shelf);	    
@@ -79,7 +80,7 @@ char* ask_str_q (char *question)
 
 int ask_int_q (char *question)
 {
-  char reply[128] ="\n";
+  char reply[128] = "\n";
 
   while (reply[0] == '\n')
     {
@@ -109,7 +110,6 @@ int ask_int_q (char *question)
   ok_ans = atoi(answer);
   return ok_ans;
 }
-
 
 int ask_yn(char* question)
 {
@@ -149,11 +149,12 @@ char ask_3alt(char* question, char alt1, char alt2, char alt3)
   return ans;
 }
 
+
 bool check_shelf_ans(char* answer)
 {
   if (isalpha(answer[0]))
     {
-      if (strlen(answer) == 1)
+      if (answer[1]== '\0')
 	{
 	  return false;
 	}
@@ -170,22 +171,30 @@ bool check_shelf_ans(char* answer)
   return false;
 }
 
-char* fix_shelf_num(char* shelf_num)
+char* fix_shelf_num(warehouse* warehouse_list, char* shelf_num)
 {
-  while (!(check_shelf_ans(shelf_num)))
+  while (1)
     {
-      shelf_num = ask_str_q("Please answer on the format [A23], [A2], [B34]");
+      while (!(check_shelf_ans(shelf_num)))
+	{
+	  shelf_num = ask_str_q("Please answer on the format [A23], [A2], [B34]");
+	}
+
+      shelf_num[0] = toupper(shelf_num[0]);
+  
+      if (is_shelf_taken(warehouse_list, shelf_num))
+	{
+	  shelf_num = ask_str_q("That shelf is already taken. Please choose another shelf.");
+	}
+      else
+	{
+	  break;
+	}
     }
-  shelf_num[0] = toupper(shelf_num[0]);
-return shelf_num;
+  return shelf_num;
 }
 
-void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
-{
-  printf("\n\n");
-  printf("\tYour new item\n");
-  print_box_shelf(name, description, price, shelf_num, num_items);
-}
+
 
 void add_shelf_IO(warehouse *warehouse_list)
 {
@@ -200,7 +209,7 @@ void add_shelf_IO(warehouse *warehouse_list)
   description = ask_str_q("Description");
   price = ask_int_q("Price (kr)");
   shelf_num = ask_str_q("Shelf number");
-  shelf_num = fix_shelf_num(shelf_num);
+  shelf_num = fix_shelf_num(warehouse_list, shelf_num);
   num_items = ask_int_q("Number of items ");
 
   puts("---------------------------------");
@@ -304,14 +313,13 @@ void edit_shelf_IO_aux(warehouse* warehouse_list, shelf* choosed_shelf)
 	case 4: {
 	  print_shelf_num(choosed_shelf);
 	  shelf_num = ask_str_q("\nNew shelf number: ");
-	  shelf_num = fix_shelf_num(shelf_num);} break;
+	  shelf_num = fix_shelf_num(warehouse_list, shelf_num);} break;
 	case 5: {
 	  print_num_items(choosed_shelf);
 	  num_items = ask_int_q("\nNew num_items: ");} break;
 	default: puts("defaaaauultttt");
 	}
       cont = ask_yn("Continue edit this item? y/n ");
-      //flyttad till toppen
         
     }
   int ans = ask_yn("Save this ware? y/n");
@@ -406,10 +414,13 @@ void edit_shelf_IO(warehouse* warehouse_list)
 
 
   
-void undo(void)
+void undo_action_IO(warehouse* warehouse_list)
 {
-  puts("hej hej");
-  //undo_action(warehouse_list);
+  int answer = ask_yn("Are you sure you would like to undo your last action?");
+  if (answer)
+    {
+      undo_action(warehouse_list);
+    }
 }
 
 
@@ -467,6 +478,13 @@ void print_warehouse(warehouse *warehouse_list)
 	  printf("================\n");
 	}
     }
+}
+
+void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
+{
+  printf("\n\n");
+  printf("\tYour new item\n");
+  print_box_shelf(name, description, price, shelf_num, num_items);
 }
 
 void print_shelf(shelf *shelf)

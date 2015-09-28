@@ -14,6 +14,8 @@ typedef struct shelf shelf;
 // Creates a new warehouse
 warehouse * new_warehouse();
 
+bool is_shelf_taken(warehouse *warehouse_list, const char *shelf_num);
+
 // adds a new item to the shelf
 void add_shelf(warehouse *warehouse_list, char *name, char *description, int price, char *shelf_num, int num_items);
 
@@ -31,9 +33,6 @@ void undo_action(warehouse *warehouse_list);
 
 // free up memory used by program
 void destroy_warehouse(warehouse *warehouse_list);
-
-// return True if shelf is occupied by another item
-bool shelf_occupied(warehouse *warehouse_list, char *shelf_num);
 
 shelf * get_last_shelf(warehouse *warehouse_list); //Karro testar
 

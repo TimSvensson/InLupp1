@@ -18,6 +18,8 @@ void remove_shelf_IO(warehouse *warehouse_list);
 
 void edit_shelf_IO(warehouse *warehouse_list);
 
+void undo_action_IO(warehouse * warehouse_list);
+
 int exit_warehouse();
 
 int ask_int_q(char* question);

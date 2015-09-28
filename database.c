@@ -53,6 +53,19 @@ struct warehouse
 
 
 
+bool is_shelf_taken(warehouse *warehouse_list, const char *shelf_num)
+{
+  for(shelf *shelf = warehouse_list->first_shelf; shelf != NULL; shelf = shelf->next_shelf)
+    {
+      if(strcmp(shelf_num, shelf->shelf_num) == 0)
+	{
+	  return true;
+	}
+    }
+
+  return false;
+}
+
 int warehouse_empty(warehouse *warehouse_list)
 {
   if(warehouse_list->first_shelf == NULL)
@@ -213,26 +226,6 @@ void save_state(warehouse *warehouse_list, shelf *shelf,
 // ----- NEW WAREHOUSE -----
 // =========================
 
-
-
-/*
-void init_prev_state(prev_state *prev_state)
-{
-  prev_state -> prev_action = NONE;
-  prev_state -> old_shelf = NULL;
-  prev_state -> old_index = 0;
-}
-
-prev_state * new_prev_State()
-{
-  prev_state *prev_state =
-    (struct prev_state*) malloc(sizeof(struct prev_state));
-
-  init_prev_state(prev_state);
-
-  return prev_state;
-}
-*/
 
 
 void init_warehouse(warehouse *warehouse_list)
