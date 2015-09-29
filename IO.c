@@ -22,7 +22,8 @@ char* strip (char* str)
     {
       if (str[i] == '\n')
 	{
-	  str[i] = '\0'; 
+	  str[i] = '\0';
+	  break;
 	}
     }
   return strdup(str);
@@ -248,9 +249,9 @@ void remove_shelf_IO(warehouse *warehouse_list)
   char ans = 0;
   int index;
   int page = 0;
-  int list_all = 1;
+  int cont = 1;
   
-  while (list_all)
+  while (cont)
     {
       ans = ask_3alt("What would you like to do? [r]emove an item / [n]ext 20 items / [e]xit", 'r', 'n', 'e');
       if (shelf == NULL && ans == 'n')
@@ -266,11 +267,11 @@ void remove_shelf_IO(warehouse *warehouse_list)
 	{
 	  index = get_index(warehouse_list);
 	  remove_shelf(warehouse_list, index);
-	  list_all = 0;
+	  cont = 0;
 	}
       else
 	{
-	  list_all = 0;
+	  cont = 0;
 	}
     }
 }
@@ -424,7 +425,6 @@ void undo_action_IO(warehouse* warehouse_list)
 }
 
 
-
 int exit_warehouse()
 {
   char ans;
@@ -446,38 +446,70 @@ int exit_warehouse()
 void print_warehouse(warehouse *warehouse_list)
 {
   printf("\n\tThe warehouse\n\n");
-
+  shelf *tmp_shelf = NULL;
   shelf *shelf = NULL;
   int cont = 1;
-
+  bool correct_index = true;
+  int continue_see = 0;
+  int index;
+  int page = 0;
+  int answer;
+  
   if(warehouse_empty(warehouse_list))
     {
       printf("Warehouse is empty!\n");
+      return;
     }
-  else
+  
+  do
     {
-      do
-	{
-	  shelf = print_20(warehouse_list, shelf);
+      shelf = print_20(warehouse_list, shelf);
+      char option = ask_3alt("What would you like to do? [s]how an item / [n]ext 20 items / [e]xit", 's', 'n', 'e');
 
+   
+      if (option == 's')
+	{
+	  answer = ask_int_q ("Which item would you like to see? Answer with a number between 1-20. Press 0 to exit.");
+	
+	  while (correct_index)
+	    {
+	      while (answer < 1 || 20 < answer)
+		{
+		  answer = ask_int_q("That's not an option. Please try again with a number between 1-20");
+		}
+	      index = page * 20 + answer - 1;
+	      cont = 0;
+	      tmp_shelf = get_shelf (warehouse_list, index);
+	      while (tmp_shelf == NULL)
+		{
+		  answer = ask_int_q("Item doesn't exist, please choose another item. ");
+		  index = page * 20 + answer - 1;
+		  tmp_shelf = get_shelf (warehouse_list, index);
+		}
+	      correct_index = false;
+	    }
+	      
+	  print_shelf(tmp_shelf);
+	  continue_see = ask_yn("Watch  another item? y/n");
+	}
+      else if (option == 'n')
+	{
+	  page = page +1;
 	  if(shelf == NULL)
 	    {
-	      break;
+	      printf("No more items\n\n");
+	      return ;
 	    }
-	  else
-	    {
-	      cont = ask_yn("Print next page? (y/n)");
-	    }
-      
-	}while(cont);
-
-      if(cont)
-	{
-	  printf("\n================\n");
-	  printf("End of warehouse\n");
-	  printf("================\n");
 	}
-    }
+
+      else
+	{
+	  puts("EXIIIIT");
+	  cont = 0;
+	  continue_see = 0;
+	}
+    }  while (continue_see);
+ 
 }
 
 void print_add_shelf(char *name, char *description, int price, char *shelf_num, int num_items)
