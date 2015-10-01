@@ -10,7 +10,7 @@ void print_main_menu()
   puts("3. Edit an item");
   puts("4. Undo the last action");
   puts("5. List all items in the database");
-  puts("6. Exit program");
+  puts("0. Exit program");
 
 }
 
@@ -26,13 +26,8 @@ void main_menu()
       print_main_menu();
 
       int answer;
-      answer = ask_int_q("\nWhat would you like to do?");
-    
-      while (answer > 6 || answer < 1)
-	{
-	  answer = ask_int_q("That's not an option. Please try again with a number between 1-6.");  
-	}
-      
+      answer = ask_int_q("\nWhat would you like to do?", 0, 5);
+
       switch (answer)
 	{
 	case 1:
@@ -55,7 +50,7 @@ void main_menu()
 	  print_warehouse(warehouse_list);
 	  break;
 
-	case 6:
+	case 0:
 	  {
 	    cont = exit_warehouse();
 	  }

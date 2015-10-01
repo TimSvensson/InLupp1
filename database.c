@@ -401,8 +401,6 @@ void undo_action(warehouse *warehouse_list)
       prev_shelf = get_shelf(warehouse_list, warehouse_list->prev_state.old_index - 1);
     }
 
-
-  
   switch(warehouse_list -> prev_state.prev_action)
     {
     case ADD:
